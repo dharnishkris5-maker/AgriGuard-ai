@@ -1,0 +1,336 @@
+{
+  "users": [
+    {
+      "id": "u-1",
+      "email": "farmer@agriguard.ai",
+      "name": "Robert Jenkins",
+      "role": "Farmer",
+      "phone": "+1 (555) 019-2834",
+      "location": "Iowa Corn Belt, USA",
+      "organization": "Jenkins Family Farms",
+      "createdAt": "2026-06-04T17:51:39.035Z"
+    },
+    {
+      "id": "u-2",
+      "email": "officer@agriguard.ai",
+      "name": "Dr. Sarah Patel",
+      "role": "Agricultural Officer",
+      "phone": "+1 (555) 014-9988",
+      "location": "Midwest Agri-Extension",
+      "organization": "Department of Agriculture",
+      "createdAt": "2026-05-05T17:51:39.037Z"
+    },
+    {
+      "id": "u-3",
+      "email": "admin@agriguard.ai",
+      "name": "Elena Rostova",
+      "role": "Admin",
+      "phone": "+1 (555) 011-2233",
+      "location": "AgriGuard Tech Hub",
+      "organization": "AgriGuard Core Team",
+      "createdAt": "2026-04-05T17:51:39.037Z"
+    },
+    {
+      "email": "dharnishkumar47@gmail.com",
+      "name": "Dharnish",
+      "role": "Farmer",
+      "phone": "+1 (555) 019-2834",
+      "location": "Iowa Corn Belt, USA",
+      "organization": "Jenkins Family Farms",
+      "id": "u-1783188085684",
+      "createdAt": "2026-07-04T18:01:25.684Z"
+    }
+  ],
+  "predictions": [
+    {
+      "id": "p-1",
+      "userId": "u-1",
+      "userName": "Robert Jenkins",
+      "input": {
+        "soilType": "Loamy",
+        "soilMoisture": 38,
+        "nitrogen": 85,
+        "phosphorus": 42,
+        "potassium": 35,
+        "temperature": 24.5,
+        "humidity": 62,
+        "rainfall": 120,
+        "phValue": 6.2,
+        "location": "Iowa Corn Belt, USA"
+      },
+      "result": {
+        "bestCrop": "Maize (Corn)",
+        "confidence": 94.2,
+        "suitableFertilizers": [
+          "Urea (46-0-0)",
+          "Diammonium Phosphate (DAP)",
+          "Muriate of Potash (MOP)"
+        ],
+        "irrigationRecommendation": "Moderate watering. Keep soil moisture at 35-45%. Apply sprinkler irrigation every 5-7 days.",
+        "diseasePrevention": [
+          "Apply seed treatment to protect against corn smut.",
+          "Ensure crop rotation with legumes to break pest lifecycles.",
+          "Monitor for signs of grey leaf spot and apply fungicides if humidity rises."
+        ],
+        "seasonalAdvice": "Perfect timing for mid-season side-dressing of Nitrogen. Avoid soil compaction during early vegetative stages.",
+        "weatherAwareness": "Expected rainfall is optimal, but watch out for upcoming late-week heavy storms.",
+        "farmingTips": [
+          "Adopt conservation tillage to preserve soil structure and retain organic matter.",
+          "Utilize visual pest traps in high-density areas."
+        ],
+        "riskLevel": "Low",
+        "explanation": "The combination of fertile loamy soil, moderate temperature, and generous Nitrogen content creates an absolutely prime environment for Maize. Soil moisture levels are in the sweet spot for rapid vegetative development."
+      },
+      "timestamp": "2026-06-30T17:51:39.037Z"
+    },
+    {
+      "id": "p-2",
+      "userId": "u-1",
+      "userName": "Robert Jenkins",
+      "input": {
+        "soilType": "Clayey",
+        "soilMoisture": 55,
+        "nitrogen": 45,
+        "phosphorus": 65,
+        "potassium": 55,
+        "temperature": 29,
+        "humidity": 78,
+        "rainfall": 220,
+        "phValue": 5.8,
+        "location": "Iowa Corn Belt, USA"
+      },
+      "result": {
+        "bestCrop": "Rice (Paddy)",
+        "confidence": 89.7,
+        "suitableFertilizers": [
+          "Ammonium Sulfate",
+          "Single Superphosphate (SSP)",
+          "Potassium Chloride"
+        ],
+        "irrigationRecommendation": "High water requirement. Maintain 5-10cm standing water in the field. Drain field 10 days before harvest.",
+        "diseasePrevention": [
+          "Dip seedlings in Pseudomonas fluorescens solution before transplanting.",
+          "Keep bunds clean to prevent rodent infestations.",
+          "Monitor closely for Rice Blast during early tillering."
+        ],
+        "seasonalAdvice": "Prepare transplanting beds with heavy organic compost. Clay soil is ideal for water retention.",
+        "weatherAwareness": "Sustained monsoon rains are beneficial, ensure proper drainage outflows are clear to prevent flash flooding.",
+        "farmingTips": [
+          "Practice mechanical weeding to stimulate tillering and aeration.",
+          "Maintain level leveling to ensure uniform water depth."
+        ],
+        "riskLevel": "Medium",
+        "explanation": "High rainfall, elevated humidity, and clayey soil which holds water exceptionally well are standard ideal parameters for Paddy. High moisture makes it unsuitable for root crops."
+      },
+      "timestamp": "2026-07-03T17:51:39.037Z"
+    },
+    {
+      "id": "p-3",
+      "userId": "u-1",
+      "userName": "Robert Jenkins",
+      "input": {
+        "soilType": "Sandy",
+        "soilMoisture": 15,
+        "nitrogen": 20,
+        "phosphorus": 15,
+        "potassium": 40,
+        "temperature": 32.1,
+        "humidity": 45,
+        "rainfall": 45,
+        "phValue": 7.4,
+        "location": "Iowa Corn Belt, USA"
+      },
+      "result": {
+        "bestCrop": "Millet (Bajra)",
+        "confidence": 91.5,
+        "suitableFertilizers": [
+          "Compost manure",
+          "NPK 15-15-15",
+          "Foliar zinc spray"
+        ],
+        "irrigationRecommendation": "Very low water consumption. Use drip irrigation sparingly. Drip twice a week during vegetative stage only.",
+        "diseasePrevention": [
+          "Treat seeds with metalaxyl for downy mildew protection.",
+          "Perform rogueing of infected plants immediately.",
+          "Avoid stagnant water around root collars."
+        ],
+        "seasonalAdvice": "Ideal for arid/dry season crops. Use mulching around plants to reduce water evaporation in sandy beds.",
+        "weatherAwareness": "High temperatures and dry spells require defensive soil mulching.",
+        "farmingTips": [
+          "Sow seed deeper in sandy soils to leverage deeper moisture channels.",
+          "Incorporate heavy green manure during the post-harvest cycle."
+        ],
+        "riskLevel": "Low",
+        "explanation": "With low rainfall, high temperatures, and poor nutrient retention of sandy soil, highly drought-resistant crops like Pearl Millet are optimal. Traditional cash crops will suffer severe moisture stress."
+      },
+      "timestamp": "2026-07-04T05:51:39.037Z"
+    }
+  ],
+  "notifications": [
+    {
+      "id": "n-1",
+      "title": "Extreme Weather Warning",
+      "message": "Flash storm advisory for Iowa region. Check irrigation canals and ensure proper drainage exits are open.",
+      "type": "alert",
+      "read": false,
+      "timestamp": "2026-07-04T15:51:39.037Z"
+    },
+    {
+      "id": "n-2",
+      "title": "AI Model Upgraded",
+      "message": "AgriGuard Crop Intelligence Model updated to v3.5. Recommendation accuracy for arid regions increased by 12%.",
+      "type": "success",
+      "read": false,
+      "timestamp": "2026-07-03T17:51:39.037Z"
+    },
+    {
+      "id": "n-3",
+      "title": "Seasonal Crop Planning Active",
+      "message": "Agricultural officers are now conducting online advisory sessions for the upcoming fall harvest planning.",
+      "type": "info",
+      "read": true,
+      "timestamp": "2026-07-01T17:51:39.037Z"
+    }
+  ],
+  "activityLogs": [
+    {
+      "id": "l-1783188968846-szgz",
+      "userId": "u-1",
+      "userName": "Robert Jenkins",
+      "action": "USER_LOGIN",
+      "details": "Successfully logged in from UI.",
+      "timestamp": "2026-07-04T18:16:08.846Z"
+    },
+    {
+      "id": "l-1783188718416-zhhf",
+      "userId": "u-1",
+      "userName": "Robert Jenkins",
+      "action": "USER_LOGIN",
+      "details": "Successfully logged in from UI.",
+      "timestamp": "2026-07-04T18:11:58.416Z"
+    },
+    {
+      "id": "l-1783188691856-9tdu",
+      "userId": "u-1",
+      "userName": "Robert Jenkins",
+      "action": "USER_LOGIN",
+      "details": "Successfully logged in from UI.",
+      "timestamp": "2026-07-04T18:11:31.856Z"
+    },
+    {
+      "id": "l-1783188647680-9ahk",
+      "userId": "u-1783188085684",
+      "userName": "Dharnish",
+      "action": "USER_LOGIN",
+      "details": "Successfully logged in from UI.",
+      "timestamp": "2026-07-04T18:10:47.680Z"
+    },
+    {
+      "id": "l-1783188379170-rvsb",
+      "userId": "u-1",
+      "userName": "Robert Jenkins",
+      "action": "USER_LOGIN",
+      "details": "Successfully logged in from UI.",
+      "timestamp": "2026-07-04T18:06:19.170Z"
+    },
+    {
+      "id": "l-1783188284376-8a2z",
+      "userId": "u-1783188085684",
+      "userName": "Dharnish",
+      "action": "USER_LOGIN",
+      "details": "Successfully logged in from UI.",
+      "timestamp": "2026-07-04T18:04:44.377Z"
+    },
+    {
+      "id": "l-1783188179102-ti7y",
+      "userId": "u-1783188085684",
+      "userName": "Dharnish",
+      "action": "USER_LOGIN",
+      "details": "Successfully logged in from UI.",
+      "timestamp": "2026-07-04T18:02:59.102Z"
+    },
+    {
+      "id": "l-1783188164120-zbnc",
+      "userId": "u-1783188085684",
+      "userName": "Dharnish",
+      "action": "USER_LOGIN",
+      "details": "Successfully logged in from UI.",
+      "timestamp": "2026-07-04T18:02:44.120Z"
+    },
+    {
+      "id": "l-1783188139656-dowx",
+      "userId": "u-1",
+      "userName": "Robert Jenkins",
+      "action": "USER_LOGIN",
+      "details": "Successfully logged in from UI.",
+      "timestamp": "2026-07-04T18:02:19.656Z"
+    },
+    {
+      "id": "l-1783188132590-dj9c",
+      "userId": "u-1783188085684",
+      "userName": "Dharnish",
+      "action": "USER_LOGIN",
+      "details": "Successfully logged in from UI.",
+      "timestamp": "2026-07-04T18:02:12.590Z"
+    },
+    {
+      "id": "l-1783188116214-n2ir",
+      "userId": "u-1783188085684",
+      "userName": "Dharnish",
+      "action": "USER_LOGIN",
+      "details": "Successfully logged in from UI.",
+      "timestamp": "2026-07-04T18:01:56.214Z"
+    },
+    {
+      "id": "l-1783188085738-atm9",
+      "userId": "u-1783188085684",
+      "userName": "Dharnish",
+      "action": "USER_REGISTER",
+      "details": "Created account with role: Farmer",
+      "timestamp": "2026-07-04T18:01:25.738Z"
+    },
+    {
+      "id": "l-1783187657495-j76r",
+      "userId": "u-1",
+      "userName": "Robert Jenkins",
+      "action": "USER_LOGIN",
+      "details": "Successfully logged in from UI.",
+      "timestamp": "2026-07-04T17:54:17.495Z"
+    },
+    {
+      "id": "l-1",
+      "userId": "u-1",
+      "userName": "Robert Jenkins",
+      "action": "CROP_PREDICTION",
+      "details": "Generated recommendation for Maize (Corn) - 94.2% confidence.",
+      "timestamp": "2026-06-30T17:51:39.037Z"
+    },
+    {
+      "id": "l-2",
+      "userId": "u-1",
+      "userName": "Robert Jenkins",
+      "action": "CROP_PREDICTION",
+      "details": "Generated recommendation for Rice (Paddy) - 89.7% confidence.",
+      "timestamp": "2026-07-03T17:51:39.037Z"
+    },
+    {
+      "id": "l-3",
+      "userId": "u-2",
+      "userName": "Dr. Sarah Patel",
+      "action": "FEEDBACK_SUBMIT",
+      "details": "Reviewed and validated AI crop prediction parameters for millet.",
+      "timestamp": "2026-07-04T05:51:39.037Z"
+    }
+  ],
+  "feedbacks": [
+    {
+      "id": "f-1",
+      "userId": "u-1",
+      "userName": "Robert Jenkins",
+      "rating": 5,
+      "comment": "The Maize prediction matches my experience perfectly! The fertilizer suggestions saved me considerable cost this season.",
+      "predictionId": "p-1",
+      "timestamp": "2026-07-01T17:51:39.037Z"
+    }
+  ]
+}

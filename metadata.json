@@ -1,0 +1,6 @@
+{
+  "name": "AgriGuard AI",
+  "description": "Enterprise-grade crop recommendation and soil health platform fueled by Gemini AI, helping agricultural organizations and farmers optimize yields through real-time soil analysis, weather awareness, and disease prevention tips.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
