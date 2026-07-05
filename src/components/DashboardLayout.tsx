@@ -20,7 +20,9 @@ import {
   AlertTriangle,
   Info,
   Home,
-  ShieldAlert
+  ShieldAlert,
+  Compass,
+  Send
 } from 'lucide-react';
 import { User as UserType, Notification } from '../types/index.js';
 
@@ -57,6 +59,84 @@ export function DashboardLayout({
 }: DashboardLayoutProps) {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [isNotifOpen, setIsNotifOpen] = useState(false);
+  const [isNavChatOpen, setIsNavChatOpen] = useState(false);
+  const [navChatInput, setNavChatInput] = useState('');
+  const [navChatMessages, setNavChatMessages] = useState<Array<{ sender: 'bot' | 'user'; text: string }>>([
+    {
+      sender: 'bot',
+      text: 'Hello! I am AgriGuard Navigator. Tell me where to go (e.g. "weather", "fertilizers", "home") or use the shortcuts below!'
+    }
+  ]);
+
+  const handleNavChatSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!navChatInput.trim()) return;
+
+    const userMsg = navChatInput.trim();
+    setNavChatMessages(prev => [...prev, { sender: 'user', text: userMsg }]);
+    setNavChatInput('');
+
+    // Process routing
+    const query = userMsg.toLowerCase();
+    let targetTab = '';
+    let pageName = '';
+
+    if (query.includes('home') || query.includes('welcome')) {
+      targetTab = 'home';
+      pageName = 'Home Page';
+    } else if (query.includes('overview') || query.includes('dashboard')) {
+      targetTab = 'dashboard';
+      pageName = 'Overview Dashboard';
+    } else if (query.includes('recommend') || query.includes('predict') || query.includes('crop')) {
+      targetTab = 'recommend';
+      pageName = 'AI Crop Recommendation';
+    } else if (query.includes('history') || query.includes('report') || query.includes('log')) {
+      targetTab = 'history';
+      pageName = 'Prediction Reports';
+    } else if (query.includes('telemetry') || query.includes('analytics') || query.includes('chart')) {
+      targetTab = 'analytics';
+      pageName = 'Telemetry Analytics';
+    } else if (query.includes('fertilizer') || query.includes('disease') || query.includes('guide') || query.includes('treatment')) {
+      targetTab = 'fertilizers';
+      pageName = 'Fertilizers & Diseases';
+    } else if (query.includes('weather') || query.includes('rain') || query.includes('temperature') || query.includes('forecast')) {
+      targetTab = 'weather';
+      pageName = 'Weather Hub';
+    } else if (query.includes('chat') || query.includes('bot') || query.includes('agronomist') || query.includes('talk')) {
+      targetTab = 'chat';
+      pageName = 'AI Farm Chatbot';
+    } else if (query.includes('profile') || query.includes('account') || query.includes('setup')) {
+      targetTab = 'profile';
+      pageName = 'Profile Setup';
+    } else if (query.includes('setting')) {
+      targetTab = 'settings';
+      pageName = 'Settings';
+    }
+
+    setTimeout(() => {
+      if (targetTab) {
+        setActiveTab(targetTab);
+        setNavChatMessages(prev => [
+          ...prev,
+          { sender: 'bot', text: `Right away! Navigating you to the "${pageName}" section.` }
+        ]);
+      } else {
+        setNavChatMessages(prev => [
+          ...prev,
+          { sender: 'bot', text: "I couldn't match that to a specific page. Try typing 'weather', 'fertilizers', 'home', or 'crop recommendation'!" }
+        ]);
+      }
+    }, 400);
+  };
+
+  const handleNavShortcut = (tabId: string, label: string) => {
+    setActiveTab(tabId);
+    setNavChatMessages(prev => [
+      ...prev,
+      { sender: 'user', text: `Go to ${label}` },
+      { sender: 'bot', text: `Navigating to ${label}...` }
+    ]);
+  };
 
   const navLabels: Record<string, Record<'en' | 'ta' | 'hi', string>> = {
     home: { en: 'Home Page', ta: 'முகப்பு பக்கம்', hi: 'मुख्य पृष्ठ' },
@@ -382,6 +462,99 @@ export function DashboardLayout({
         <main id="main-content-area" className="flex-1 overflow-y-auto p-4 md:p-8 pt-20 md:pt-8">
           {children}
         </main>
+
+        {/* FLOATING AI NAVIGATOR WIDGET */}
+        <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end">
+          {isNavChatOpen && (
+            <div className="mb-4 w-80 h-96 bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl flex flex-col overflow-hidden animate-fade-in-up">
+              {/* Header */}
+              <div className="p-3 bg-slate-950/80 border-b border-slate-800 flex justify-between items-center">
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
+                  <span className="text-xs font-bold text-slate-200">AgriGuard AI Navigator</span>
+                </div>
+                <button 
+                  onClick={() => setIsNavChatOpen(false)}
+                  className="p-1 rounded hover:bg-slate-800 text-slate-400 hover:text-white cursor-pointer"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+
+              {/* Message History */}
+              <div className="flex-1 overflow-y-auto p-3.5 space-y-3 scrollbar-thin">
+                {navChatMessages.map((msg, idx) => (
+                  <div 
+                    key={idx}
+                    className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
+                  >
+                    <div className={`max-w-[85%] p-2.5 rounded-2xl text-xs ${
+                      msg.sender === 'user' 
+                        ? 'bg-emerald-500 text-white rounded-br-none' 
+                        : 'bg-slate-800 text-slate-200 rounded-bl-none'
+                    }`}>
+                      {msg.text}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Quick Shortcuts Chips */}
+              <div className="p-2 border-t border-slate-800/40 bg-slate-900/50 flex gap-1.5 overflow-x-auto whitespace-nowrap scrollbar-none shrink-0">
+                <button 
+                  onClick={() => handleNavShortcut('home', 'Home')}
+                  className="px-2.5 py-1 text-[10px] bg-slate-800 hover:bg-slate-700 text-slate-300 font-medium rounded-full cursor-pointer transition-colors"
+                >
+                  🌾 Home
+                </button>
+                <button 
+                  onClick={() => handleNavShortcut('fertilizers', 'Fertilizers')}
+                  className="px-2.5 py-1 text-[10px] bg-slate-800 hover:bg-slate-700 text-slate-300 font-medium rounded-full cursor-pointer transition-colors"
+                >
+                  🛡️ Guide
+                </button>
+                <button 
+                  onClick={() => handleNavShortcut('weather', 'Weather')}
+                  className="px-2.5 py-1 text-[10px] bg-slate-800 hover:bg-slate-700 text-slate-300 font-medium rounded-full cursor-pointer transition-colors"
+                >
+                  🌤️ Weather
+                </button>
+                <button 
+                  onClick={() => handleNavShortcut('recommend', 'Predictor')}
+                  className="px-2.5 py-1 text-[10px] bg-slate-800 hover:bg-slate-700 text-slate-300 font-medium rounded-full cursor-pointer transition-colors"
+                >
+                  🧠 AI Predict
+                </button>
+              </div>
+
+              {/* Input Form */}
+              <form onSubmit={handleNavChatSubmit} className="p-2 border-t border-slate-800 bg-slate-950/80 flex gap-2 shrink-0">
+                <input 
+                  type="text" 
+                  value={navChatInput}
+                  onChange={e => setNavChatInput(e.target.value)}
+                  placeholder="Where would you like to go?" 
+                  className="flex-1 bg-slate-900 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-slate-200 outline-none focus:border-emerald-500/50"
+                />
+                <button 
+                  type="submit"
+                  className="p-1.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl cursor-pointer transition-colors"
+                >
+                  <Send className="w-3.5 h-3.5" />
+                </button>
+              </form>
+            </div>
+          )}
+
+          {/* Floating Bubble Trigger Button */}
+          <button
+            onClick={() => setIsNavChatOpen(!isNavChatOpen)}
+            className="w-12 h-12 rounded-full bg-emerald-500 text-white shadow-xl hover:bg-emerald-600 transition-all duration-300 flex items-center justify-center cursor-pointer hover:scale-105 active:scale-95 group relative border-2 border-emerald-400/20"
+          >
+            <Compass className="w-5 h-5 group-hover:rotate-45 transition-transform duration-300" />
+            <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-red-500 animate-ping"></span>
+          </button>
+        </div>
       </div>
     </div>
   );

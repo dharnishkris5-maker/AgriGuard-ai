@@ -46,6 +46,46 @@
       "userId": "u-1",
       "userName": "Robert Jenkins",
       "input": {
+        "soilType": "Clayey",
+        "soilMoisture": 52,
+        "nitrogen": 65,
+        "phosphorus": 35,
+        "potassium": 50,
+        "temperature": 28,
+        "humidity": 80,
+        "rainfall": 240,
+        "phValue": 5.5,
+        "location": "Assam, India"
+      },
+      "result": {
+        "bestCrop": "Rice (Paddy)",
+        "confidence": 91.2,
+        "suitableFertilizers": [
+          "Ammonium Sulfate",
+          "Single Superphosphate (SSP)",
+          "Muriate of Potash"
+        ],
+        "irrigationRecommendation": "Paddy requires continuous shallow flooding. Keep standing water at 5-10cm.",
+        "diseasePrevention": [
+          "Protect from Rice Blast",
+          "Monitor for stem borers and use organic bio-pesticides"
+        ],
+        "seasonalAdvice": "Transplant in early morning. Clay soil retains water perfectly for paddy fields.",
+        "weatherAwareness": "Heavy rainfall aligns with rice water demands; ensure drainage bunds are stable.",
+        "farmingTips": [
+          "Practice line-sowing for higher tillering",
+          "Incorporate organic green manure post-harvest"
+        ],
+        "riskLevel": "Medium",
+        "explanation": "High clay content (Clayey) and abundant water (Moisture: 52%, Rainfall: 240mm) provide the exact heavy, water-retentive environment required for high-grade Rice cultivation."
+      },
+      "id": "p-1783242226861",
+      "timestamp": "2026-07-05T09:03:46.861Z"
+    },
+    {
+      "userId": "u-1",
+      "userName": "Robert Jenkins",
+      "input": {
         "soilType": "Loamy",
         "soilMoisture": 35,
         "nitrogen": 50,
@@ -427,6 +467,22 @@
     }
   ],
   "activityLogs": [
+    {
+      "id": "l-1783242226907-mw2b",
+      "userId": "u-1",
+      "userName": "Robert Jenkins",
+      "action": "CROP_PREDICTION",
+      "details": "Generated recommendations for Rice (Paddy) (91.2% confidence)",
+      "timestamp": "2026-07-05T09:03:46.907Z"
+    },
+    {
+      "id": "l-1783242191394-0y5n",
+      "userId": "u-1",
+      "userName": "Robert Jenkins",
+      "action": "USER_LOGIN",
+      "details": "Successfully logged in from UI.",
+      "timestamp": "2026-07-05T09:03:11.394Z"
+    },
     {
       "id": "l-1783241865537-ynpr",
       "userId": "u-1",
