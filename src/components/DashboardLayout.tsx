@@ -22,7 +22,8 @@ import {
   Home,
   ShieldAlert,
   Compass,
-  Send
+  Send,
+  LineChart
 } from 'lucide-react';
 import { User as UserType, Notification, PredictionHistory } from '../types/index.js';
 
@@ -172,6 +173,9 @@ export function DashboardLayout({
     } else if (query.includes('telemetry') || query.includes('analytics') || query.includes('chart')) {
       targetTab = 'analytics';
       pageName = 'Telemetry Analytics';
+    } else if (query.includes('activity') || query.includes('activities') || query.includes('calendar') || query.includes('operation') || query.includes('schedule')) {
+      targetTab = 'activities';
+      pageName = 'Agri Activities';
     } else if (query.includes('fertilizer') || query.includes('disease') || query.includes('guide') || query.includes('treatment')) {
       targetTab = 'fertilizers';
       pageName = 'Fertilizers & Diseases';
@@ -213,14 +217,13 @@ export function DashboardLayout({
       { sender: 'user', text: `Go to ${label}` },
       { sender: 'bot', text: `Navigating to ${label}...` }
     ]);
-  };
-
-  const navLabels: Record<string, Record<'en' | 'ta' | 'hi', string>> = {
+  };  const navLabels: Record<string, Record<'en' | 'ta' | 'hi', string>> = {
     home: { en: 'Home Page', ta: 'முகப்பு பக்கம்', hi: 'मुख्य पृष्ठ' },
     dashboard: { en: 'Overview', ta: 'கண்ணோட்டம்', hi: 'अवलोकन' },
     recommend: { en: 'AI Crop Recommendation', ta: 'AI பயிர் பரிந்துரை', hi: 'एआई फसल सिफारिश' },
     history: { en: 'Prediction Reports', ta: 'முன்கணிப்பு அறிக்கைகள்', hi: 'पूर्वानुमान रिपोर्ट' },
     analytics: { en: 'Telemetry Analytics', ta: 'தொலைத்தொடர்பு பகுப்பாய்வு', hi: 'टेलीमेट्री विश्लेषण' },
+    activities: { en: 'Agri Activities', ta: 'விவசாய செயல்பாடுகள்', hi: 'कृषि गतिविधियां' },
     weather: { en: 'Weather Hub', ta: 'வானிலை மையம்', hi: 'मौसम केंद्र' },
     chat: { en: 'AI Farm Chatbot', ta: 'AI விவசாய அரட்டை', hi: 'एआई फार्म चैटबॉट' },
     fertilizers: { en: 'Fertilizers & Diseases', ta: 'உரங்கள் & நோய்கள்', hi: 'उर्वरक और रोग' },
@@ -235,6 +238,7 @@ export function DashboardLayout({
     { id: 'recommend', label: navLabels.recommend[language], icon: BrainCircuit, roles: ['Farmer', 'Agricultural Officer', 'Admin'] },
     { id: 'history', label: navLabels.history[language], icon: History, roles: ['Farmer', 'Agricultural Officer', 'Admin'] },
     { id: 'analytics', label: navLabels.analytics[language], icon: TrendingUp, roles: ['Farmer', 'Agricultural Officer', 'Admin'] },
+    { id: 'activities', label: navLabels.activities[language], icon: LineChart, roles: ['Farmer', 'Agricultural Officer', 'Admin'] },
     { id: 'fertilizers', label: navLabels.fertilizers[language], icon: ShieldAlert, roles: ['Farmer', 'Agricultural Officer', 'Admin'] },
     { id: 'weather', label: navLabels.weather[language], icon: CloudSun, roles: ['Farmer', 'Agricultural Officer', 'Admin'] },
     { id: 'chat', label: navLabels.chat[language], icon: MessageSquare, roles: ['Farmer', 'Agricultural Officer', 'Admin'] },

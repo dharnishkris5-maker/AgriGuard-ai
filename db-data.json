@@ -468,6 +468,30 @@
   ],
   "activityLogs": [
     {
+      "id": "l-1783243549819-wsmy",
+      "userId": "u-1",
+      "userName": "Robert Jenkins",
+      "action": "USER_LOGIN",
+      "details": "Successfully logged in from UI.",
+      "timestamp": "2026-07-05T09:25:49.820Z"
+    },
+    {
+      "id": "l-1783243269388-5t7y",
+      "userId": "u-1",
+      "userName": "Robert Jenkins",
+      "action": "USER_LOGIN",
+      "details": "Successfully logged in from UI.",
+      "timestamp": "2026-07-05T09:21:09.388Z"
+    },
+    {
+      "id": "l-1783242627921-5he1",
+      "userId": "u-1",
+      "userName": "Robert Jenkins",
+      "action": "USER_LOGIN",
+      "details": "Successfully logged in from UI.",
+      "timestamp": "2026-07-05T09:10:27.921Z"
+    },
+    {
       "id": "l-1783242407717-8r4k",
       "userId": "u-1",
       "userName": "Robert Jenkins",

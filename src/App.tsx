@@ -32,6 +32,7 @@ import { AdminDashboard } from './components/AdminDashboard.js';
 import { SettingsPage } from './components/SettingsPage.js';
 import { FertilizersPage } from './components/FertilizersPage.js';
 import { RainEffect } from './components/RainEffect.js';
+import { AgriActivitiesPage } from './components/AgriActivitiesPage.js';
 
 const DAILY_TIPS = [
   {
@@ -87,6 +88,17 @@ export default function App() {
     largeText: false,
     highContrast: false
   });
+
+  useEffect(() => {
+    if (showAuthModal) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [showAuthModal]);
 
   const syncNotifications = async (userId: string) => {
     try {
@@ -318,27 +330,33 @@ export default function App() {
 
             {/* AUTHENTICATION MODAL */}
             {showAuthModal && (
-              <div className="fixed inset-0 bg-slate-950/70 backdrop-blur-md flex items-center justify-center z-50 p-4 animate-fade-in">
-                <div className="bg-slate-900 border border-slate-800 p-6 sm:p-8 rounded-3xl w-full max-w-md relative shadow-2xl text-white animate-scale-in">
+              <div 
+                className="fixed inset-0 flex items-center justify-center z-50 p-4 animate-fade-in bg-cover bg-center"
+                style={{ backgroundImage: "url('/farm_landing_bg.png')" }}
+              >
+                {/* Dark blur overlay */}
+                <div className="absolute inset-0 bg-slate-950/65 backdrop-blur-md z-0" />
+
+                <div className="bg-slate-900/90 border border-slate-800/80 p-6 sm:p-8 rounded-3xl w-full max-w-md h-[550px] relative shadow-2xl text-white flex flex-col justify-between overflow-hidden animate-scale-in z-10 backdrop-blur-sm">
                   <button
                     id="close-auth-modal"
                     onClick={() => setShowAuthModal(false)}
-                    className="absolute right-4 top-4 p-1 rounded-lg text-slate-500 hover:text-white hover:bg-slate-800 cursor-pointer"
+                    className="absolute right-4 top-4 p-1 rounded-lg text-slate-500 hover:text-white hover:bg-slate-800 cursor-pointer z-20"
                   >
                     <X className="w-5 h-5" />
                   </button>
 
-                  <div className="text-center mb-6">
-                    <div className="w-12 h-12 bg-emerald-500/10 border border-emerald-500/30 rounded-xl flex items-center justify-center text-emerald-400 mx-auto mb-3">
+                  <div className="text-center mb-2 shrink-0">
+                    <div className="w-12 h-12 bg-emerald-500/10 border border-emerald-500/30 rounded-xl flex items-center justify-center text-emerald-400 mx-auto mb-2">
                       <Sprout className="w-6 h-6 animate-pulse" />
                     </div>
                     <h3 className="text-lg font-bold text-slate-100">
                       {authMode === 'login' ? 'Farmer Log In Portal' : 'Register Agricultural Account'}
                     </h3>
-                    <p className="text-[10px] font-mono text-emerald-400 uppercase tracking-wider mt-1">Enterprise Agricultural Extension</p>
+                    <p className="text-[10px] font-mono text-emerald-400 uppercase tracking-wider mt-0.5">Enterprise Agricultural Extension</p>
                   </div>
 
-                  <form onSubmit={authMode === 'login' ? handleLogin : handleRegister} className="space-y-4">
+                  <form onSubmit={authMode === 'login' ? handleLogin : handleRegister} className="flex-1 overflow-y-auto pr-1 space-y-4 scrollbar-thin my-2">
                     {authMode === 'register' && (
                       <>
                         <div>
@@ -588,6 +606,13 @@ export default function App() {
 
             {activeTab === 'fertilizers' && (
               <FertilizersPage
+                theme={theme}
+                language={language}
+              />
+            )}
+
+            {activeTab === 'activities' && (
+              <AgriActivitiesPage
                 theme={theme}
                 language={language}
               />
