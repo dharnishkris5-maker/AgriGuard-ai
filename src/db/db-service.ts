@@ -18,8 +18,8 @@ const DEFAULT_USERS: User[] = [
     email: 'farmer@agriguard.ai',
     name: 'Robert Jenkins',
     role: 'Farmer',
-    phone: '+1 (555) 019-2834',
-    location: 'Iowa Corn Belt, USA',
+    phone: '+91 98765 43210',
+    location: 'Punjab, India',
     organization: 'Jenkins Family Farms',
     createdAt: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString()
   },
@@ -60,7 +60,7 @@ const DEFAULT_PREDICTIONS: PredictionHistory[] = [
       humidity: 62,
       rainfall: 120,
       phValue: 6.2,
-      location: 'Iowa Corn Belt, USA'
+      location: 'Punjab, India'
     },
     result: {
       bestCrop: 'Maize (Corn)',
@@ -97,7 +97,7 @@ const DEFAULT_PREDICTIONS: PredictionHistory[] = [
       humidity: 78,
       rainfall: 220,
       phValue: 5.8,
-      location: 'Iowa Corn Belt, USA'
+      location: 'Punjab, India'
     },
     result: {
       bestCrop: 'Rice (Paddy)',
@@ -134,7 +134,7 @@ const DEFAULT_PREDICTIONS: PredictionHistory[] = [
       humidity: 45,
       rainfall: 45,
       phValue: 7.4,
-      location: 'Iowa Corn Belt, USA'
+      location: 'Punjab, India'
     },
     result: {
       bestCrop: 'Millet (Bajra)',
@@ -163,7 +163,7 @@ const DEFAULT_NOTIFICATIONS: Notification[] = [
   {
     id: 'n-1',
     title: 'Extreme Weather Warning',
-    message: 'Flash storm advisory for Iowa region. Check irrigation canals and ensure proper drainage exits are open.',
+    message: 'Flash storm advisory for Punjab region. Check irrigation canals and ensure proper drainage exits are open.',
     type: 'alert',
     read: false,
     timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString()

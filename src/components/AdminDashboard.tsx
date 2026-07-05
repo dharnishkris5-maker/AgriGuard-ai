@@ -40,8 +40,8 @@ export function AdminDashboard({ theme, onBroadcastNotification }: AdminDashboar
       
       // Seeded/registered users could be calculated or we just show a pretty mock registry
       setUsers([
-        { id: 'u-1', email: 'farmer@agriguard.ai', name: 'Robert Jenkins', role: 'Farmer', location: 'Iowa Corn Belt, USA', createdAt: new Date().toISOString() },
-        { id: 'u-2', email: 'officer@agriguard.ai', name: 'Dr. Sarah Patel', role: 'Agricultural Officer', location: 'Midwest Extension', createdAt: new Date().toISOString() },
+        { id: 'u-1', email: 'farmer@agriguard.ai', name: 'Robert Jenkins', role: 'Farmer', location: 'Punjab, India', createdAt: new Date().toISOString() },
+        { id: 'u-2', email: 'officer@agriguard.ai', name: 'Dr. Sarah Patel', role: 'Agricultural Officer', location: 'Punjab Extension', createdAt: new Date().toISOString() },
         { id: 'u-3', email: 'admin@agriguard.ai', name: 'Elena Rostova', role: 'Admin', location: 'AgriGuard Tech Hub', createdAt: new Date().toISOString() }
       ]);
     } catch (e) {

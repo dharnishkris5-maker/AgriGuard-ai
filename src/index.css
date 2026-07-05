@@ -11,6 +11,26 @@ body {
   overflow-x: hidden;
 }
 
+.landing-page-root {
+  background-image: linear-gradient(rgba(15, 23, 42, 0.75), rgba(15, 23, 42, 0.75)), url('./assets/agri_bg.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+.dashboard-layout-root {
+  background-image: linear-gradient(rgba(15, 23, 42, 0.82), rgba(15, 23, 42, 0.82)), url('./assets/agri_bg_new.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+.dashboard-layout-root.light-theme {
+  background-image: linear-gradient(rgba(248, 250, 252, 0.82), rgba(248, 250, 252, 0.82)), url('./assets/agri_bg_new.png');
+}
+
 /* Custom fine-scrollbar for modern dashboard aesthetics */
 ::-webkit-scrollbar {
   width: 6px;

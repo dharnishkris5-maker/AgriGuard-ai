@@ -18,7 +18,9 @@ import {
   X,
   CheckCircle,
   AlertTriangle,
-  Info
+  Info,
+  Home,
+  ShieldAlert
 } from 'lucide-react';
 import { User as UserType, Notification } from '../types/index.js';
 
@@ -32,6 +34,10 @@ interface DashboardLayoutProps {
   onMarkNotificationsRead: () => void;
   theme: 'light' | 'dark';
   toggleTheme: () => void;
+  language: 'en' | 'ta' | 'hi';
+  setLanguage: (lang: 'en' | 'ta' | 'hi') => void;
+  isRainy: boolean;
+  setIsRainy: (rain: boolean) => void;
 }
 
 export function DashboardLayout({
@@ -43,21 +49,41 @@ export function DashboardLayout({
   onLogout,
   onMarkNotificationsRead,
   theme,
-  toggleTheme
+  toggleTheme,
+  language,
+  setLanguage,
+  isRainy,
+  setIsRainy
 }: DashboardLayoutProps) {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [isNotifOpen, setIsNotifOpen] = useState(false);
 
+  const navLabels: Record<string, Record<'en' | 'ta' | 'hi', string>> = {
+    home: { en: 'Home Page', ta: 'முகப்பு பக்கம்', hi: 'मुख्य पृष्ठ' },
+    dashboard: { en: 'Overview', ta: 'கண்ணோட்டம்', hi: 'अवलोकन' },
+    recommend: { en: 'AI Crop Recommendation', ta: 'AI பயிர் பரிந்துரை', hi: 'एआई फसल सिफारिश' },
+    history: { en: 'Prediction Reports', ta: 'முன்கணிப்பு அறிக்கைகள்', hi: 'पूर्वानुमान रिपोर्ट' },
+    analytics: { en: 'Telemetry Analytics', ta: 'தொலைத்தொடர்பு பகுப்பாய்வு', hi: 'टेलीमेट्री विश्लेषण' },
+    weather: { en: 'Weather Hub', ta: 'வானிலை மையம்', hi: 'मौसम केंद्र' },
+    chat: { en: 'AI Farm Chatbot', ta: 'AI விவசாய அரட்டை', hi: 'एआई फार्म चैटबॉट' },
+    fertilizers: { en: 'Fertilizers & Diseases', ta: 'உரங்கள் & நோய்கள்', hi: 'उर्वरक और रोग' },
+    profile: { en: 'Profile Setup', ta: 'சுயவிவர அமைப்பு', hi: 'प्रोफाइल सेटअप' },
+    admin: { en: 'Admin Logs & System', ta: 'நிர்வாகப் பதிவுகள்', hi: 'व्यवस्थापक लॉग' },
+    settings: { en: 'Settings', ta: 'அமைப்புகள்', hi: 'सेटिंग्स' }
+  };
+
   const navItems = [
-    { id: 'dashboard', label: 'Overview', icon: LayoutDashboard, roles: ['Farmer', 'Agricultural Officer', 'Admin'] },
-    { id: 'recommend', label: 'AI Crop Recommendation', icon: BrainCircuit, roles: ['Farmer', 'Agricultural Officer', 'Admin'] },
-    { id: 'history', label: 'Prediction Reports', icon: History, roles: ['Farmer', 'Agricultural Officer', 'Admin'] },
-    { id: 'analytics', label: 'Telemetry Analytics', icon: TrendingUp, roles: ['Farmer', 'Agricultural Officer', 'Admin'] },
-    { id: 'weather', label: 'Weather Hub', icon: CloudSun, roles: ['Farmer', 'Agricultural Officer', 'Admin'] },
-    { id: 'chat', label: 'AI Farm Chatbot', icon: MessageSquare, roles: ['Farmer', 'Agricultural Officer', 'Admin'] },
-    { id: 'profile', label: 'Profile Setup', icon: User, roles: ['Farmer', 'Agricultural Officer', 'Admin'] },
-    { id: 'admin', label: 'Admin Logs & System', icon: Shield, roles: ['Admin', 'Agricultural Officer'] },
-    { id: 'settings', label: 'Settings', icon: Settings, roles: ['Farmer', 'Agricultural Officer', 'Admin'] }
+    { id: 'home', label: navLabels.home[language], icon: Home, roles: ['Farmer', 'Agricultural Officer', 'Admin'] },
+    { id: 'dashboard', label: navLabels.dashboard[language], icon: LayoutDashboard, roles: ['Farmer', 'Agricultural Officer', 'Admin'] },
+    { id: 'recommend', label: navLabels.recommend[language], icon: BrainCircuit, roles: ['Farmer', 'Agricultural Officer', 'Admin'] },
+    { id: 'history', label: navLabels.history[language], icon: History, roles: ['Farmer', 'Agricultural Officer', 'Admin'] },
+    { id: 'analytics', label: navLabels.analytics[language], icon: TrendingUp, roles: ['Farmer', 'Agricultural Officer', 'Admin'] },
+    { id: 'fertilizers', label: navLabels.fertilizers[language], icon: ShieldAlert, roles: ['Farmer', 'Agricultural Officer', 'Admin'] },
+    { id: 'weather', label: navLabels.weather[language], icon: CloudSun, roles: ['Farmer', 'Agricultural Officer', 'Admin'] },
+    { id: 'chat', label: navLabels.chat[language], icon: MessageSquare, roles: ['Farmer', 'Agricultural Officer', 'Admin'] },
+    { id: 'profile', label: navLabels.profile[language], icon: User, roles: ['Farmer', 'Agricultural Officer', 'Admin'] },
+    { id: 'admin', label: navLabels.admin[language], icon: Shield, roles: ['Admin', 'Agricultural Officer'] },
+    { id: 'settings', label: navLabels.settings[language], icon: Settings, roles: ['Farmer', 'Agricultural Officer', 'Admin'] }
   ];
 
   const allowedNavItems = navItems.filter(item => item.roles.includes(user.role));
@@ -73,7 +99,7 @@ export function DashboardLayout({
   };
 
   return (
-    <div className={`min-h-screen font-sans flex ${theme === 'dark' ? 'bg-slate-950 text-slate-100' : 'bg-[#F8FAFC] text-slate-800'}`}>
+    <div className={`h-full w-full overflow-hidden font-sans flex dashboard-layout-root ${theme === 'dark' ? 'bg-slate-950/45 backdrop-blur-md text-slate-100' : 'bg-[#F8FAFC]/45 backdrop-blur-md text-slate-800 light-theme'}`}>
       
       {/* SIDEBAR - DESKTOP */}
       <aside className="hidden md:flex flex-col w-64 bg-[#0F172A] border-r border-slate-800 shrink-0">
@@ -164,6 +190,15 @@ export function DashboardLayout({
         </div>
 
         <div className="flex items-center gap-2">
+          {/* Language Selector */}
+          <select
+            value={language}
+            onChange={(e) => setLanguage(e.target.value as any)}
+            className="text-[10px] px-1.5 py-1 bg-slate-800 border border-slate-700 text-slate-200 outline-none font-bold rounded-lg"
+          >
+            <option value="en">EN</option>
+            <option value="ta">தமிழ்</option>
+          </select>
           {/* Notifications Triggers */}
           <div className="relative">
             <button
@@ -268,7 +303,21 @@ export function DashboardLayout({
             </div>
           </div>
 
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-4">
+            {/* Language Selector */}
+            <select
+              value={language}
+              onChange={(e) => setLanguage(e.target.value as any)}
+              className={`text-xs px-2.5 py-1.5 rounded-xl border focus:ring-1 focus:ring-emerald-500 outline-none font-bold cursor-pointer transition-all ${
+                theme === 'dark' 
+                  ? 'bg-slate-800 border-slate-700 text-slate-200 hover:bg-slate-700' 
+                  : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'
+              }`}
+            >
+              <option value="en">English</option>
+              <option value="ta">தமிழ் (Tamil)</option>
+            </select>
+
             {/* Notifications drop menu */}
             <div className="relative">
               <button

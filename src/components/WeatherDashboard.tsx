@@ -17,9 +17,90 @@ import { WeatherInfo } from '../types/index.js';
 interface WeatherDashboardProps {
   location: string;
   theme: 'light' | 'dark';
+  language: 'en' | 'ta' | 'hi';
+  onWeatherLoaded?: (weather: WeatherInfo) => void;
 }
 
-export function WeatherDashboard({ location, theme }: WeatherDashboardProps) {
+const t = {
+  en: {
+    title: 'Agricultural Weather Hub',
+    subtitle: 'Analyze localized microclimate trends, relative moisture levels, and tailored crop protection warnings.',
+    placeholder: 'Enter crop field location...',
+    btnFetch: 'Fetch',
+    syncing: 'Synchronizing regional satellite indicators...',
+    monitorActive: 'MONITOR ACTIVE',
+    airHumidity: 'Air Humidity',
+    seasonalRain: 'Seasonal Rain',
+    advisoryTitle: 'Farmers Meteorological Advice',
+    outlookTitle: 'Regional Weekly Outlook',
+    sunny: 'Sunny',
+    rainy: 'Rainy',
+    stormy: 'Stormy',
+    windy: 'Windy',
+    day: 'Day',
+    advisories: {
+      Rainy: 'Ensure proper outflow drainage around low-lying root bases to prevent moisture saturation and root rot.',
+      Stormy: 'Secure greenhouse structures and delay foliar nutrient sprays. Heavy runoff warning active.',
+      Sunny: 'High rate of moisture evaporation. Water early in the morning or implement defensive mulching.',
+      SunnyMild: 'Prime solar radiation. Ideal window for nitrogen fertilization and weed controls.',
+      Windy: 'Strong winds can damage tall stalks. Avoid transplanting vulnerable seedlings today.',
+      default: 'Stable weather conditions. Good window for general soil preparation and crop inspections.'
+    }
+  },
+  ta: {
+    title: 'விவசாய வானிலை மையம்',
+    subtitle: 'இருப்பிட வானிலை போக்குகள், ஈரப்பதம் மற்றும் பயிர் பாதுகாப்பு எச்சரிக்கைகளை ஆராயுங்கள்.',
+    placeholder: 'நிலத்தின் இருப்பிடத்தை உள்ளிடவும்...',
+    btnFetch: 'பெறு',
+    syncing: 'பிராந்திய செயற்கைக்கோள் தரவுகளை ஒருங்கிணைக்கிறது...',
+    monitorActive: 'கண்காணிப்பு செயலில் உள்ளது',
+    airHumidity: 'காற்று ஈரப்பதம்',
+    seasonalRain: 'மழைப்பொழிவு',
+    advisoryTitle: 'விவசாய வானிலை ஆலோசனை',
+    outlookTitle: 'பிராந்திய வாராந்திர வானிலை கணிப்பு',
+    sunny: 'வெயில்',
+    rainy: 'மழை',
+    stormy: 'புயல்',
+    windy: 'காற்று',
+    day: 'நாள்',
+    advisories: {
+      Rainy: 'வேர் அழுகல் மற்றும் அதிக நீர் தேங்குவதைத் தடுக்க முறையான வடிகால் வசதிகளை உறுதி செய்யவும்.',
+      Stormy: 'கிரீன்ஹவுஸ் கட்டமைப்புகளைப் பாதுகாக்கவும். உரங்கள் தெளிப்பதை தள்ளிப்போடவும்.',
+      Sunny: 'அதிக நீர் ஆவியாதல் ஏற்படும். காலையிலேயே தண்ணீர் பாய்ச்சவும் அல்லது மூடாக்கு அமைக்கவும்.',
+      SunnyMild: 'சிறந்த சூரிய ஒளி. உரமிடுவதற்கும் களை மேலாண்மைக்கும் உகந்த தருணம்.',
+      Windy: 'பலத்த காற்று பயிர்களை சேதப்படுத்தலாம். இளம் நாற்றுகளை மாற்றி நடவு செய்வதை தவிர்க்கவும்.',
+      default: 'நிலையான வானிலை. பொதுவான மண் தயாரிப்பு மற்றும் பயிர் ஆய்வுகளுக்கு ஏற்றது.'
+    }
+  },
+  hi: {
+    title: 'कृषि मौसम केंद्र',
+    subtitle: 'स्थानीय जलवायु प्रवृत्तियों, आर्द्रता स्तरों और फसल सुरक्षा चेतावनियों का विश्लेषण करें.',
+    placeholder: 'खेत का स्थान दर्ज करें...',
+    btnFetch: 'प्राप्त करें',
+    syncing: 'क्षेत्रीय उपग्रह संकेतकों को सिंक्रनाइज़ कर रहा है...',
+    monitorActive: 'निगरानी सक्रिय',
+    airHumidity: 'हवा की आर्द्रता',
+    seasonalRain: 'मौसमी वर्षा',
+    advisoryTitle: 'किसानों के लिए मौसम संबंधी सलाह',
+    outlookTitle: 'क्षेत्रीय साप्ताहिक आउटलुक',
+    sunny: 'धूप',
+    rainy: 'बारिश',
+    stormy: 'तूफान',
+    windy: 'हवादार',
+    day: 'दिन',
+    advisories: {
+      Rainy: 'जड़ सड़ने से बचाने के लिए निचले जड़ क्षेत्रों के आसपास उचित जल निकासी सुनिश्चित करें.',
+      Stormy: 'ग्रीनहाउस संरचनाओं को सुरक्षित करें और उर्वरक छिड़काव में देरी करें। भारी बहाव की चेतावनी सक्रिय है।',
+      Sunny: 'नमी के वाष्पीकरण की उच्च दर। सुबह जल्दी पानी दें या जैविक मल्चिंग लागू करें।',
+      SunnyMild: 'उत्कृष्ट सौर विकिरण। नाइट्रोजन निषेचन और खरपतवार नियंत्रण के लिए आदर्श समय।',
+      Windy: 'तेज हवाएं लंबे डंठल को नुकसान पहुंचा सकती हैं। आज नाजुक पौधों की रोपाई से बचें।',
+      default: 'स्थिर मौसम की स्थिति। सामान्य मिट्टी की तैयारी और फसल निरीक्षण के लिए अच्छा समय।'
+    }
+  }
+};
+
+export function WeatherDashboard({ location, theme, language, onWeatherLoaded }: WeatherDashboardProps) {
+  const labels = t[language] || t.en;
   const [searchLocation, setSearchLocation] = useState(location);
   const [weather, setWeather] = useState<WeatherInfo | null>(null);
   const [loading, setLoading] = useState(false);
@@ -31,6 +112,9 @@ export function WeatherDashboard({ location, theme }: WeatherDashboardProps) {
       if (res.ok) {
         const data = await res.json();
         setWeather(data);
+        if (onWeatherLoaded) {
+          onWeatherLoaded(data);
+        }
       }
     } catch (e) {
       console.error('Error fetching weather:', e);
@@ -51,20 +135,38 @@ export function WeatherDashboard({ location, theme }: WeatherDashboardProps) {
   };
 
   const getAgriAdvisory = (cond: string, temp: number): string => {
+    const adv = labels.advisories;
     switch (cond) {
       case 'Rainy':
-        return 'Ensure proper outflow drainage around low-lying root bases to prevent moisture saturation and root rot.';
+        return adv.Rainy;
       case 'Stormy':
-        return 'Secure greenhouse structures and delay foliar nutrient sprays. Heavy runoff warning active.';
+        return adv.Stormy;
       case 'Sunny':
-        return temp > 30 
-          ? 'High rate of moisture evaporation. Water early in the morning or implement defensive mulching.'
-          : 'Prime solar radiation. Ideal window for nitrogen fertilization and weed controls.';
+        return temp > 30 ? adv.Sunny : adv.SunnyMild;
       case 'Windy':
-        return 'Strong winds can damage tall stalks. Avoid transplanting vulnerable seedlings today.';
+        return adv.Windy;
       default:
-        return 'Stable weather conditions. Good window for general soil preparation and crop inspections.';
+        return adv.default;
     }
+  };
+
+  const highlightImportantPoints = (text: string) => {
+    const terms = [
+      'outflow drainage', 'root rot', 'delay foliar nutrient sprays', 'heavy runoff warning',
+      'defensive mulching', 'nitrogen fertilization', 'avoid transplanting', 'stable weather conditions',
+      'வேர் அழுகல்', 'வடிகால் வசதிகளை', 'உரங்கள் தெளிப்பதை தள்ளிப்போடவும்', 'மூடாக்கு அமைக்கவும்',
+      'உரமிடுவதற்கும்', 'நாற்றுகளை மாற்றி நடவு செய்வதை தவிர்க்கவும்', 'நிலையான வானிலை',
+      'जड़ सड़ने', 'जल निकासी', 'उर्वरक छिड़काव में देरी', 'जैविक मल्चिंग',
+      'नाइट्रोजन निषेचन', 'रोपाई से बचें', 'स्थिर मौसम की स्थिति'
+    ];
+    
+    let highlighted = text;
+    terms.forEach(term => {
+      const regex = new RegExp(`(${term})`, 'gi');
+      highlighted = highlighted.replace(regex, `<strong class="text-amber-600 dark:text-amber-400 bg-amber-500/10 dark:bg-amber-400/10 px-1 py-0.5 rounded font-black border border-amber-500/20">$1</strong>`);
+    });
+    
+    return <span dangerouslySetInnerHTML={{ __html: highlighted }} />;
   };
 
   const getWeatherIcon = (cond: string) => {
@@ -77,6 +179,16 @@ export function WeatherDashboard({ location, theme }: WeatherDashboardProps) {
     }
   };
 
+  const getCondLabel = (cond: string) => {
+    switch (cond) {
+      case 'Sunny': return labels.sunny;
+      case 'Rainy': return labels.rainy;
+      case 'Stormy': return labels.stormy;
+      case 'Windy': return labels.windy;
+      default: return cond;
+    }
+  };
+
   return (
     <div className="space-y-8">
       
@@ -85,10 +197,10 @@ export function WeatherDashboard({ location, theme }: WeatherDashboardProps) {
         <div>
           <h1 className="text-xl font-extrabold tracking-tight text-slate-800 dark:text-slate-100 flex items-center gap-2.5">
             <CloudSun className="w-5.5 h-5.5 text-emerald-500" />
-            Agricultural Weather Hub
+            {labels.title}
           </h1>
           <p className="text-xs text-slate-500 mt-1">
-            Analyze localized microclimate trends, relative moisture levels, and tailored crop protection warnings.
+            {labels.subtitle}
           </p>
         </div>
 
@@ -99,7 +211,7 @@ export function WeatherDashboard({ location, theme }: WeatherDashboardProps) {
               type="text"
               value={searchLocation}
               onChange={e => setSearchLocation(e.target.value)}
-              placeholder="Enter crop field location..."
+              placeholder={labels.placeholder}
               className="w-full pl-9 pr-3 py-1.5 rounded-xl border text-xs font-medium focus:ring-1 focus:ring-emerald-500 dark:bg-slate-800 dark:border-slate-700 outline-none"
             />
             <Search className="absolute left-3 top-2.5 w-3.5 h-3.5 text-slate-400" />
@@ -109,7 +221,7 @@ export function WeatherDashboard({ location, theme }: WeatherDashboardProps) {
             type="submit"
             className="px-4 py-1.5 bg-slate-900 hover:bg-slate-800 dark:bg-slate-800 dark:hover:bg-slate-700 border dark:border-slate-700 text-xs text-slate-200 rounded-xl transition-all font-semibold cursor-pointer"
           >
-            Fetch
+            {labels.btnFetch}
           </button>
         </form>
       </div>
@@ -117,7 +229,7 @@ export function WeatherDashboard({ location, theme }: WeatherDashboardProps) {
       {loading ? (
         <div className="flex flex-col justify-center items-center py-24">
           <Loader2 className="w-8 h-8 text-emerald-500 animate-spin" />
-          <p className="text-xs text-slate-400 mt-2 font-mono">Synchronizing regional satellite indicators...</p>
+          <p className="text-xs text-slate-400 mt-2 font-mono">{labels.syncing}</p>
         </div>
       ) : weather ? (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
@@ -128,27 +240,27 @@ export function WeatherDashboard({ location, theme }: WeatherDashboardProps) {
               <span className="text-[9px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest flex items-center gap-1.5">
                 <MapPin className="w-3.5 h-3.5 text-emerald-500" /> {searchLocation}
               </span>
-              <span className="text-[8px] font-mono bg-emerald-500/10 text-emerald-500 px-2 py-0.5 rounded-full font-bold">MONITOR ACTIVE</span>
+              <span className="text-[8px] font-mono bg-emerald-500/10 text-emerald-500 px-2 py-0.5 rounded-full font-bold">{labels.monitorActive}</span>
             </div>
 
             <div className="flex items-center gap-4 py-2">
-              <div className="p-4 rounded-2xl bg-slate-100/50 dark:bg-slate-800/30 border dark:border-slate-700/20">
+              <div className="p-4 rounded-2xl bg-slate-100/55 dark:bg-slate-800/30 border dark:border-slate-700/20">
                 {getWeatherIcon(weather.condition)}
               </div>
               <div>
                 <h3 className="text-3xl font-black text-slate-800 dark:text-slate-100 font-mono">{weather.temperature}°C</h3>
-                <p className="text-xs font-semibold text-slate-500 mt-0.5">{weather.condition} Day</p>
+                <p className="text-xs font-semibold text-slate-500 mt-0.5">{getCondLabel(weather.condition)} {labels.day}</p>
               </div>
             </div>
 
             {/* Granular meters */}
             <div className="grid grid-cols-2 gap-4 border-t dark:border-slate-800 pt-4 text-xs font-semibold">
               <div className="space-y-1">
-                <span className="text-slate-400 font-medium flex items-center gap-1"><Droplets className="w-3.5 h-3.5 text-blue-500" /> Air Humidity</span>
+                <span className="text-slate-400 font-medium flex items-center gap-1"><Droplets className="w-3.5 h-3.5 text-blue-500" /> {labels.airHumidity}</span>
                 <p className="font-mono text-slate-700 dark:text-slate-200 font-bold">{weather.humidity}%</p>
               </div>
               <div className="space-y-1">
-                <span className="text-slate-400 font-medium flex items-center gap-1"><CloudRain className="w-3.5 h-3.5 text-blue-500" /> Seasonal Rain</span>
+                <span className="text-slate-400 font-medium flex items-center gap-1"><CloudRain className="w-3.5 h-3.5 text-blue-500" /> {labels.seasonalRain}</span>
                 <p className="font-mono text-slate-700 dark:text-slate-200 font-bold">{weather.rainfall} mm</p>
               </div>
             </div>
@@ -162,10 +274,10 @@ export function WeatherDashboard({ location, theme }: WeatherDashboardProps) {
               <div className="p-3 bg-amber-500/10 rounded-xl text-amber-500 shrink-0 h-fit">
                 <Lightbulb className="w-5 h-5 animate-bounce" />
               </div>
-              <div className="space-y-1.5">
-                <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500">Farmers Meteorological Advice</h4>
-                <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed font-light">
-                  {getAgriAdvisory(weather.condition, weather.temperature)}
+              <div className="space-y-2">
+                <h4 className="text-sm font-black uppercase tracking-wider text-slate-800 dark:text-slate-100">{labels.advisoryTitle}</h4>
+                <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
+                  {highlightImportantPoints(getAgriAdvisory(weather.condition, weather.temperature))}
                 </p>
               </div>
             </div>
@@ -173,7 +285,7 @@ export function WeatherDashboard({ location, theme }: WeatherDashboardProps) {
             {/* 7-DAY FORECAST GRID */}
             <div className={`p-6 rounded-2xl border ${theme === 'dark' ? 'bg-slate-900/30 border-slate-800/80' : 'bg-white border-slate-200 shadow-sm'} space-y-4`}>
               <h4 className="text-xs font-bold uppercase tracking-widest text-slate-400 flex items-center gap-1.5">
-                <Calendar className="w-4 h-4 text-emerald-500" /> Regional Weekly Outlook
+                <Calendar className="w-4 h-4 text-emerald-500" /> {labels.outlookTitle}
               </h4>
               <div className="grid grid-cols-2 sm:grid-cols-7 gap-3.5 text-center">
                 {weather.forecast.map((fc, i) => (
@@ -181,7 +293,7 @@ export function WeatherDashboard({ location, theme }: WeatherDashboardProps) {
                     <p className="text-[10px] font-bold text-slate-400">{fc.day}</p>
                     <div className="flex justify-center">{getWeatherIcon(fc.condition)}</div>
                     <p className="text-xs font-mono font-bold text-slate-700 dark:text-slate-200">{fc.temp}°C</p>
-                    <p className="text-[8px] font-semibold text-slate-400 uppercase">{fc.condition}</p>
+                    <p className="text-[8px] font-semibold text-slate-400 uppercase">{getCondLabel(fc.condition)}</p>
                   </div>
                 ))}
               </div>
