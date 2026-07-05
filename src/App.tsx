@@ -443,6 +443,7 @@ export default function App() {
             setLanguage={setLanguage}
             isRainy={isRainy}
             setIsRainy={setIsRainy}
+            predictions={predictions}
           >
             {/* DYNAMIC TAB CONSOLE */}
             {activeTab === 'home' && (

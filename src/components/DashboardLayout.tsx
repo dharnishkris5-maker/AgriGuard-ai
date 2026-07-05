@@ -24,7 +24,7 @@ import {
   Compass,
   Send
 } from 'lucide-react';
-import { User as UserType, Notification } from '../types/index.js';
+import { User as UserType, Notification, PredictionHistory } from '../types/index.js';
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -40,6 +40,7 @@ interface DashboardLayoutProps {
   setLanguage: (lang: 'en' | 'ta' | 'hi') => void;
   isRainy: boolean;
   setIsRainy: (rain: boolean) => void;
+  predictions?: PredictionHistory[];
 }
 
 export function DashboardLayout({
@@ -55,7 +56,8 @@ export function DashboardLayout({
   language,
   setLanguage,
   isRainy,
-  setIsRainy
+  setIsRainy,
+  predictions = []
 }: DashboardLayoutProps) {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [isNotifOpen, setIsNotifOpen] = useState(false);
@@ -67,6 +69,80 @@ export function DashboardLayout({
       text: 'Hello! I am AgriGuard Navigator. Tell me where to go (e.g. "weather", "fertilizers", "home") or use the shortcuts below!'
     }
   ]);
+
+  const getAgriResponse = (query: string): string => {
+    const q = query.toLowerCase();
+    const latest = predictions && predictions.length > 0 ? predictions[0] : null;
+
+    // Check for general farming advice / crop cultivation
+    if (q.includes('grow') || q.includes('cultivate') || q.includes('plant') || q.includes('farming') || q.includes('crop')) {
+      if (q.includes('potato')) {
+        return "Potatoes grow best in loose, well-drained loamy soil with a pH of 5.0 to 6.0. They require cool temperatures, moderate moisture, and a balanced NPK fertilizer. Stop watering 2 weeks prior to harvest to let skins cure.";
+      }
+      if (q.includes('rice') || q.includes('paddy')) {
+        return "Rice (paddy) thrives in clay or clayey loam soils that retain water well. It requires standing water during early vegetative stages, high nitrogen levels (Urea), and warm temperatures (20°C - 35°C). Be mindful of Rice Blast fungal control.";
+      }
+      if (q.includes('saffron')) {
+        return "Saffron requires well-drained, alpine gravelly soils with low humidity and cool climates. Plant bulbs in autumn (Sep-Oct) and avoid heavy watering as excess moisture rots the corms.";
+      }
+      if (q.includes('bamboo')) {
+        return "Bamboo grows incredibly fast in moist, clayey or alluvial soils. It requires plenty of water, high nitrogen fertilization, and grows well in warm, humid regions like Northeast India.";
+      }
+      if (q.includes('tomato')) {
+        return "Tomatoes require sandy-loam soils rich in organic matter. Provide deep watering at the base to avoid leaf pathogens, and spray calcium nitrate to prevent blossom end rot.";
+      }
+      return "For successful cultivation, always test your soil pH, N-P-K nutrient levels, and choose crops suited to your local rainfall and temperature cycles. You can input your parameters in the 'AI Crop Recommendation' tab for a precise simulation.";
+    }
+
+    // Fertilizers
+    if (q.includes('fertilizer') || q.includes('urea') || q.includes('npk') || q.includes('nitrogen') || q.includes('potassium') || q.includes('phosphorus') || q.includes('potash')) {
+      if (q.includes('nitrogen') || q.includes('urea')) {
+        return "Nitrogen (N) promotes rapid vegetative leaf growth. Urea is the most common chemical nitrogen source (46% N). However, excessive early application can weaken stalks and invite fungal diseases like blast. Organic options include composted manure, blood meal, and cover-cropping with legumes.";
+      }
+      if (q.includes('phosphorus') || q.includes('dap') || q.includes('phosphate')) {
+        return "Phosphorus (P) is crucial for root development, flowering, and seed formation. Diammonium Phosphate (DAP) provides both Nitrogen and Phosphorus. For organic phosphorus, apply bone meal or rock phosphate directly to the root zone.";
+      }
+      if (q.includes('potassium') || q.includes('mop') || q.includes('potash')) {
+        return "Potassium (K) or Potash (commonly Muriate of Potash - MOP) increases crop disease resistance, water efficiency, and fruit size/quality. Essential for tubers, roots, and grain-filling phases.";
+      }
+      return "Balanced N-P-K (Nitrogen, Phosphorus, Potassium) ratios are vital. Use our 'AI Crop Predictor' or consult the 'Fertilizers & Diseases Guide' tab for specific crop fertilization guidelines.";
+    }
+
+    // Pest & Disease control
+    if (q.includes('disease') || q.includes('prevent') || q.includes('pest') || q.includes('bug') || q.includes('blast') || q.includes('blight') || q.includes('rot') || q.includes('scab') || q.includes('cure') || q.includes('treat')) {
+      if (q.includes('blast') || q.includes('rice')) {
+        return "Rice Blast (fungus) is treated by spraying Tricyclazole 75% WP at 0.6g/L of water. Ensure you avoid excess early Urea and utilize silicon-based fertilizers to strengthen plant tissue.";
+      }
+      if (q.includes('blight') || q.includes('tomato')) {
+        return "Late Blight of potato/tomato is a devastating oomycete pathogen. Spray Metalaxyl 8% + Mancozeb 64% WP at 2.5g/L of water. Implement crop rotation and prune low leaves to improve ventilation.";
+      }
+      if (q.includes('rot') || q.includes('capsule')) {
+        return "Capsule Rot in cardamoms is triggered by high moisture. Treat by spraying 1% Bordeaux mixture (10g Copper Sulfate + 10g Quicklime per 1L of water) and applying neem cake to the plant clumps.";
+      }
+      if (q.includes('scab')) {
+        return "Potato Scab is caused by soil-borne bacteria and is worse in alkaline soils. Keep soil pH slightly acidic (5.0 - 5.5) and ensure crop beds are consistently moist during tuber initiation.";
+      }
+      return "To diagnose and treat specific pests or leaf diseases, check out the 'Fertilizers & Diseases' guide tab for detailed organic and chemical treatment cards.";
+    }
+
+    // Irrigation
+    if (q.includes('water') || q.includes('irrigate') || q.includes('irrigation') || q.includes('drip') || q.includes('rain')) {
+      return "Effective irrigation depends on crop type and soil properties. Heavy clay soils require slower watering (drip) to avoid saturation and capsule rot. Sandy soils require frequent, lighter irrigation cycles. For precise recommendations, run the AI Crop Predictor.";
+    }
+
+    // Weather
+    if (q.includes('weather') || q.includes('temp') || q.includes('temperature') || q.includes('humidity')) {
+      return "Environmental climate governs crop metabolism. High humidity boosts fungal spores, while dry heat increases transpiration demands. Visit the 'Weather Hub' tab to search any location in India and retrieve live meteorology alerts.";
+    }
+
+    // Latest Prediction check
+    if (latest && (q.includes('result') || q.includes('latest') || q.includes('my crop') || q.includes('recommendation'))) {
+      return `Based on your latest prediction, the recommended crop for your field in ${latest.input.location} is ${latest.result.bestCrop} (confidence: ${latest.result.confidence.toFixed(1)}%). The agronomist analysis explains: "${latest.result.explanation}"`;
+    }
+
+    // General fallback agronomist advice
+    return "As an AgriGuard Agronomist, I recommend keeping soil organic carbon high, practicing crop rotation, and fertilizing based on soil test reports. Let me know if you need instructions on specific crops, soil pH, N-P-K nutrients, or crop diseases!";
+  };
 
   const handleNavChatSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -87,7 +163,7 @@ export function DashboardLayout({
     } else if (query.includes('overview') || query.includes('dashboard')) {
       targetTab = 'dashboard';
       pageName = 'Overview Dashboard';
-    } else if (query.includes('recommend') || query.includes('predict') || query.includes('crop')) {
+    } else if (query.includes('recommend') || query.includes('predict')) {
       targetTab = 'recommend';
       pageName = 'AI Crop Recommendation';
     } else if (query.includes('history') || query.includes('report') || query.includes('log')) {
@@ -99,7 +175,7 @@ export function DashboardLayout({
     } else if (query.includes('fertilizer') || query.includes('disease') || query.includes('guide') || query.includes('treatment')) {
       targetTab = 'fertilizers';
       pageName = 'Fertilizers & Diseases';
-    } else if (query.includes('weather') || query.includes('rain') || query.includes('temperature') || query.includes('forecast')) {
+    } else if (query.includes('weather') || query.includes('rain') || query.includes('forecast')) {
       targetTab = 'weather';
       pageName = 'Weather Hub';
     } else if (query.includes('chat') || query.includes('bot') || query.includes('agronomist') || query.includes('talk')) {
@@ -121,9 +197,10 @@ export function DashboardLayout({
           { sender: 'bot', text: `Right away! Navigating you to the "${pageName}" section.` }
         ]);
       } else {
+        const agriAns = getAgriResponse(userMsg);
         setNavChatMessages(prev => [
           ...prev,
-          { sender: 'bot', text: "I couldn't match that to a specific page. Try typing 'weather', 'fertilizers', 'home', or 'crop recommendation'!" }
+          { sender: 'bot', text: agriAns }
         ]);
       }
     }, 400);

@@ -468,6 +468,14 @@
   ],
   "activityLogs": [
     {
+      "id": "l-1783242407717-8r4k",
+      "userId": "u-1",
+      "userName": "Robert Jenkins",
+      "action": "USER_LOGIN",
+      "details": "Successfully logged in from UI.",
+      "timestamp": "2026-07-05T09:06:47.717Z"
+    },
+    {
       "id": "l-1783242226907-mw2b",
       "userId": "u-1",
       "userName": "Robert Jenkins",
