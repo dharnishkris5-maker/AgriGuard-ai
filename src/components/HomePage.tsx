@@ -136,7 +136,7 @@ export function HomePage({ user, setActiveTab, predictions, theme, language }: H
     <div className="space-y-8 animate-fade-in">
       
       {/* WELCOME BANNER */}
-      <div className={`p-6 sm:p-8 rounded-3xl border relative overflow-hidden transition-all duration-300 ${
+      <div className={`p-6 sm:p-8 rounded-3xl border relative overflow-hidden transition-all duration-300 animate-fade-in-up ${
         theme === 'dark' 
           ? 'bg-slate-900/60 border-slate-800/80' 
           : 'bg-white border-slate-200 shadow-md shadow-slate-100/50'
@@ -173,17 +173,18 @@ export function HomePage({ user, setActiveTab, predictions, theme, language }: H
           {labels.primaryOps}
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-          {quickLinks.map(link => {
+          {quickLinks.map((link, index) => {
             const Icon = link.icon;
             return (
               <button
                 key={link.id}
                 onClick={() => setActiveTab(link.id)}
-                className={`p-6 rounded-2xl border text-left transition-all duration-300 transform hover:-translate-y-1 hover:shadow-lg cursor-pointer flex flex-col justify-between h-48 ${
+                className={`p-6 rounded-2xl border text-left transition-all duration-300 transform hover:-translate-y-1.5 hover:shadow-lg cursor-pointer flex flex-col justify-between h-48 animate-fade-in-up ${
                   theme === 'dark' 
                     ? 'bg-slate-900/40 border-slate-800/80 hover:border-emerald-500/30' 
                     : 'bg-white border-slate-200 hover:border-emerald-500/30 shadow-sm'
                 }`}
+                style={{ animationDelay: `${(index + 1) * 75}ms`, opacity: 0, animationFillMode: 'forwards' }}
               >
                 <div className={`w-10 h-10 rounded-xl flex items-center justify-center border transition-colors ${link.color}`}>
                   <Icon className="w-5 h-5" />

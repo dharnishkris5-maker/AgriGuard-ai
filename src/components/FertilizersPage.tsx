@@ -397,7 +397,7 @@ export function FertilizersPage({ theme, language }: FertilizersPageProps) {
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {filtered.map(disease => {
+          {filtered.map((disease, index) => {
             // Pick strings based on active language
             const dName = language === 'ta' ? disease.nameTa : language === 'hi' ? disease.nameHi : disease.nameEn;
             const dPathogen = language === 'ta' ? disease.pathogenTa : language === 'hi' ? disease.pathogenHi : disease.pathogenEn;
@@ -410,8 +410,9 @@ export function FertilizersPage({ theme, language }: FertilizersPageProps) {
               <div
                 key={disease.id}
                 className={`p-6 rounded-2xl border ${
-                  theme === 'dark' ? 'bg-slate-900/30 border-slate-800/80 hover:bg-slate-900/40' : 'bg-white border-slate-200 shadow-sm hover:shadow-md'
-                } transition-all space-y-5 flex flex-col justify-between`}
+                  theme === 'dark' ? 'bg-slate-900/30 border-slate-800/80 hover:bg-slate-900/45' : 'bg-white border-slate-200 shadow-sm hover:shadow-md'
+                } transition-all duration-300 hover:-translate-y-1.5 hover:shadow-lg hover:shadow-emerald-500/5 hover:border-emerald-500/30 animate-fade-in-up space-y-5 flex flex-col justify-between`}
+                style={{ animationDelay: `${index * 60}ms`, opacity: 0, animationFillMode: 'forwards' }}
               >
                 {/* Crop & Disease Title Header */}
                 <div className="flex justify-between items-start border-b dark:border-slate-800 pb-3 gap-3">

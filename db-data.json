@@ -78,6 +78,45 @@
         "riskLevel": "Low",
         "explanation": "Based on the specified parameters, soil nitrogen, temperature, and moisture are highly suitable for high-yield grains."
       },
+      "id": "p-1783241865506",
+      "timestamp": "2026-07-05T08:57:45.506Z"
+    },
+    {
+      "userId": "u-1",
+      "userName": "Robert Jenkins",
+      "input": {
+        "soilType": "Loamy",
+        "soilMoisture": 35,
+        "nitrogen": 50,
+        "phosphorus": 40,
+        "potassium": 40,
+        "temperature": 25,
+        "humidity": 60,
+        "rainfall": 100,
+        "phValue": 6.5,
+        "location": "karur, India"
+      },
+      "result": {
+        "bestCrop": "Wheat",
+        "confidence": 85,
+        "suitableFertilizers": [
+          "NPK 15-15-15",
+          "Compost Manure"
+        ],
+        "irrigationRecommendation": "Apply moderate irrigation at critical crown-root initiation stage.",
+        "diseasePrevention": [
+          "Treat seed with fungicide",
+          "Ensure proper spacing"
+        ],
+        "seasonalAdvice": "Avoid sowing in waterlogged soil conditions.",
+        "weatherAwareness": "Monitor local dry-spell forecasts for additional watering cycles.",
+        "farmingTips": [
+          "Sow at a depth of 5cm",
+          "Control weeds early"
+        ],
+        "riskLevel": "Low",
+        "explanation": "Based on the specified parameters, soil nitrogen, temperature, and moisture are highly suitable for high-yield grains."
+      },
       "id": "p-1783232617233",
       "timestamp": "2026-07-05T06:23:37.233Z"
     },
@@ -388,6 +427,22 @@
     }
   ],
   "activityLogs": [
+    {
+      "id": "l-1783241865537-ynpr",
+      "userId": "u-1",
+      "userName": "Robert Jenkins",
+      "action": "CROP_PREDICTION",
+      "details": "Generated recommendations for Wheat (85% confidence)",
+      "timestamp": "2026-07-05T08:57:45.538Z"
+    },
+    {
+      "id": "l-1783241825600-i5f3",
+      "userId": "u-1",
+      "userName": "Robert Jenkins",
+      "action": "USER_LOGIN",
+      "details": "Successfully logged in from UI.",
+      "timestamp": "2026-07-05T08:57:05.600Z"
+    },
     {
       "id": "l-1783240243811-1xgh",
       "userId": "u-1",
