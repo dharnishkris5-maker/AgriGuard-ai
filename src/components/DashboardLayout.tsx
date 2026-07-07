@@ -34,7 +34,7 @@ import {
   Database,
   Clock
 } from 'lucide-react';
-import { User as UserType, Notification, PredictionHistory } from '../types/index.js';
+import { User as UserType, Notification, PredictionHistory, ActivityLog } from '../types/index.js';
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
