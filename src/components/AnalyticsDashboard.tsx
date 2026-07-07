@@ -29,25 +29,40 @@ export function AnalyticsDashboard({ predictions, theme }: AnalyticsDashboardPro
     ? (predictions.reduce((acc, p) => acc + p.input.nitrogen, 0) / totalReports)
     : 0;
 
-  // Render a beautiful pure SVG Area Chart for the last 5 reports' moisture
+  // Render a beautiful pure SVG Bar Chart for the last 5 reports' moisture
   const lastPredictions = [...predictions].reverse().slice(-5);
   const chartHeight = 120;
   const chartWidth = 360;
   
-  // Calculate SVG points for moisture area
-  const points = lastPredictions.map((p, i) => {
-    const x = lastPredictions.length > 1 ? (i / (lastPredictions.length - 1)) * chartWidth : chartWidth / 2;
-    // scale moisture from 0-100 to chart height (120-10)
-    const y = chartHeight - (p.input.soilMoisture / 100) * (chartHeight - 20) - 10;
-    return { x, y };
+  // Calculate SVG coordinates for columns (bars)
+  const barWidth = 24;
+  const bars = lastPredictions.map((p, i) => {
+    // Distribute x positions nicely across the width
+    const x = lastPredictions.length > 1
+      ? 30 + (i / (lastPredictions.length - 1)) * (chartWidth - 60 - barWidth)
+      : chartWidth / 2 - barWidth / 2;
+    
+    // Scale moisture from 0-100 to chart height (120 - 35)
+    const height = Math.max(4, (p.input.soilMoisture / 100) * (chartHeight - 35));
+    const y = chartHeight - height - 10;
+    
+    return {
+      x,
+      y,
+      width: barWidth,
+      height,
+      moisture: p.input.soilMoisture,
+      crop: p.result.bestCrop.split(' (')[0]
+    };
   });
 
-  const areaPath = points.length > 0
-    ? `M 0 ${chartHeight} ` + points.map(pt => `L ${pt.x} ${pt.y}`).join(' ') + ` L ${chartWidth} ${chartHeight} Z`
-    : '';
-
-  const linePath = points.length > 0
-    ? points.map((pt, i) => (i === 0 ? `M ${pt.x} ${pt.y}` : `L ${pt.x} ${pt.y}`)).join(' ')
+  // Calculate SVG line path to connect the top-centers of each bar (trend line)
+  const linePath = bars.length > 0
+    ? bars.map((bar, i) => {
+        const cx = bar.x + bar.width / 2;
+        const cy = bar.y;
+        return i === 0 ? `M ${cx} ${cy}` : `L ${cx} ${cy}`;
+      }).join(' ')
     : '';
 
   return (
@@ -107,10 +122,13 @@ export function AnalyticsDashboard({ predictions, theme }: AnalyticsDashboardPro
               <div className="w-full max-w-md">
                 <svg className="w-full overflow-visible" viewBox={`0 0 ${chartWidth} ${chartHeight}`}>
                   <defs>
-                    <linearGradient id="moistureGrad" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="#10b981" stopOpacity="0.4" />
-                      <stop offset="100%" stopColor="#10b981" stopOpacity="0.0" />
+                    <linearGradient id="moistureBarGrad" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor="#fb923c" />
+                      <stop offset="100%" stopColor="#ea580c" />
                     </linearGradient>
+                    <filter id="barShadow" x="-10%" y="-10%" width="120%" height="120%">
+                      <feDropShadow dx="0" dy="2" stdDeviation="2" floodOpacity="0.25" floodColor="#000000" />
+                    </filter>
                   </defs>
                   
                   {/* Grid Lines */}
@@ -118,20 +136,79 @@ export function AnalyticsDashboard({ predictions, theme }: AnalyticsDashboardPro
                   <line x1="0" y1="60" x2={chartWidth} y2="60" stroke="rgba(156, 163, 175, 0.1)" strokeDasharray="3" />
                   <line x1="0" y1="100" x2={chartWidth} y2="100" stroke="rgba(156, 163, 175, 0.1)" strokeDasharray="3" />
 
-                  {/* Area fill */}
-                  <path d={areaPath} fill="url(#moistureGrad)" />
-                  {/* Line border */}
-                  <path d={linePath} fill="none" stroke="#10b981" strokeWidth="3" strokeLinecap="round" />
+                  {/* Trend line connecting tops of bars (up and down trend) */}
+                  {linePath && (
+                    <path
+                      d={linePath}
+                      fill="none"
+                      stroke="#f97316"
+                      strokeWidth="0.75"
+                      strokeDasharray="4 3"
+                      className="opacity-60"
+                    />
+                  )}
 
-                  {/* Render interactive dots */}
-                  {points.map((pt, idx) => (
-                    <g key={idx}>
-                      <circle cx={pt.x} cy={pt.y} r="5" fill="#090d16" stroke="#10b981" strokeWidth="2.5" />
-                      <text x={pt.x} y={pt.y - 12} fill="#10b981" fontSize="9" fontWeight="bold" fontFamily="monospace" textAnchor="middle">
-                        {lastPredictions[idx].input.soilMoisture}%
+                  {/* Render columns (bars) */}
+                  {bars.map((bar, idx) => (
+                    <g key={idx} className="group cursor-pointer">
+                      {/* Interactive hover glow */}
+                      <rect
+                        x={bar.x - 4}
+                        y={bar.y - 4}
+                        width={bar.width + 8}
+                        height={bar.height + 8}
+                        rx={8}
+                        fill="rgba(249, 115, 22, 0.05)"
+                        className="opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                      />
+                      
+                      {/* Main Bar */}
+                      <rect
+                        x={bar.x}
+                        y={bar.y}
+                        width={bar.width}
+                        height={bar.height}
+                        rx={6}
+                        fill="url(#moistureBarGrad)"
+                        filter="url(#barShadow)"
+                        className="transition-all duration-300 group-hover:fill-amber-400"
+                      />
+                      
+                      {/* Interactive dot at the top of the bar */}
+                      <circle
+                        cx={bar.x + bar.width / 2}
+                        cy={bar.y}
+                        r="1.8"
+                        fill={theme === 'dark' ? '#0b111e' : '#ffffff'}
+                        stroke="#f97316"
+                        strokeWidth="0.75"
+                      />
+
+                      {/* Text value above bar */}
+                      <text
+                        x={bar.x + bar.width / 2}
+                        y={bar.y - 10}
+                        fill="#fb923c"
+                        fontSize="9"
+                        fontWeight="bold"
+                        fontFamily="monospace"
+                        textAnchor="middle"
+                        className="transition-all duration-300 group-hover:scale-110"
+                      >
+                        {bar.moisture}%
                       </text>
-                      <text x={pt.x} y={chartHeight + 14} fill="#94a3b8" fontSize="8" fontFamily="monospace" textAnchor="middle">
-                        {lastPredictions[idx].result.bestCrop.split(' (')[0]}
+                      
+                      {/* Label below bar */}
+                      <text
+                        x={bar.x + bar.width / 2}
+                        y={chartHeight + 14}
+                        fill="#94a3b8"
+                        fontSize="8"
+                        fontFamily="monospace"
+                        textAnchor="middle"
+                        className="transition-colors duration-300 group-hover:fill-amber-400"
+                      >
+                        {bar.crop}
                       </text>
                     </g>
                   ))}

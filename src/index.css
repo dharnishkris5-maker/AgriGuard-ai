@@ -64,3 +64,123 @@ body {
 .animate-fade-in-up {
   animation: fadeInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
+
+/* Subtle 3D Page Perspective and Card Effects */
+.perspective-container {
+  perspective: 2000px;
+}
+
+.page-3d-card {
+  transform-style: preserve-3d;
+  transform: rotateX(1.2deg) rotateY(-0.8deg) translateZ(0);
+  transition: transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.8s ease;
+  box-shadow: 
+    0 15px 35px rgba(0, 0, 0, 0.25),
+    0 5px 15px rgba(0, 0, 0, 0.15);
+}
+
+.page-3d-card:hover {
+  transform: rotateX(0deg) rotateY(0deg) translateZ(8px);
+  box-shadow: 
+    0 20px 40px rgba(0, 0, 0, 0.35),
+    0 8px 20px rgba(0, 0, 0, 0.25);
+}
+
+.light-theme .page-3d-card {
+  box-shadow: 
+    0 10px 30px rgba(0, 0, 0, 0.06),
+    0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.light-theme .page-3d-card:hover {
+  box-shadow: 
+    0 15px 35px rgba(0, 0, 0, 0.1),
+    0 3px 10px rgba(0, 0, 0, 0.06);
+}
+
+/* Stark Bold Headings globally */
+h1, h2, h3, h4, h5, h6,
+.font-extrabold,
+.font-black {
+  font-weight: 900 !important;
+}
+
+/* Custom High Contrast Content Color Customizations */
+.high-contrast-active {
+  filter: contrast(1.25) saturate(1.4);
+}
+
+/* Make headers solid stark white (or dark slate in light theme) */
+.high-contrast-active h1,
+.high-contrast-active h2,
+.high-contrast-active h3,
+.high-contrast-active h4,
+.high-contrast-active h5,
+.high-contrast-active h6 {
+  color: #ffffff !important;
+}
+
+.high-contrast-active.light-theme h1,
+.high-contrast-active.light-theme h2,
+.high-contrast-active.light-theme h3,
+.high-contrast-active.light-theme h4,
+.high-contrast-active.light-theme h5,
+.high-contrast-active.light-theme h6 {
+  color: #020617 !important;
+}
+
+/* Overwrite slate text with higher contrast tones */
+.high-contrast-active .text-slate-400,
+.high-contrast-active .text-slate-500 {
+  color: #e2e8f0 !important; /* Stark light gray */
+}
+
+.high-contrast-active.light-theme .text-slate-400,
+.high-contrast-active.light-theme .text-slate-500 {
+  color: #0f172a !important; /* Stark dark slate */
+}
+
+.high-contrast-active .text-slate-300 {
+  color: #f8fafc !important; /* Solid white */
+}
+
+.high-contrast-active.light-theme .text-slate-300 {
+  color: #090d16 !important;
+}
+
+/* Dark layout high-contrast enhancements (deeper backgrounds, white borders) */
+.high-contrast-active .bg-slate-900\/40,
+.high-contrast-active .bg-slate-900\/30,
+.high-contrast-active .bg-slate-950\/60,
+.high-contrast-active .bg-slate-900\/90 {
+  background-color: #0b111e !important; /* Premium Obsidian midnight blue background */
+  border-color: #cbd5e1 !important;     /* Bright border */
+  border-width: 0.5px !important;       /* Very thin, clean borders */
+}
+
+.high-contrast-active.light-theme .bg-slate-900\/40,
+.high-contrast-active.light-theme .bg-slate-900\/30,
+.high-contrast-active.light-theme .bg-white {
+  background-color: #ffffff !important;
+  border-color: #090d16 !important;
+  border-width: 0.5px !important;
+}
+
+.high-contrast-active .border-slate-800,
+.high-contrast-active .border-slate-800\/80,
+.high-contrast-active .border-slate-700,
+.high-contrast-active .border-slate-700\/30,
+.high-contrast-active .border-slate-200 {
+  border-color: #cbd5e1 !important; /* Sharp borders */
+  border-width: 0.5px !important;
+}
+
+.high-contrast-active.light-theme .border-slate-800,
+.high-contrast-active.light-theme .border-slate-800\/80,
+.high-contrast-active.light-theme .border-slate-700,
+.high-contrast-active.light-theme .border-slate-200 {
+  border-color: #0f172a !important;
+  border-width: 0.5px !important;
+}
+
+

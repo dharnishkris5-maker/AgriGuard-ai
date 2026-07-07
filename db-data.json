@@ -46,6 +46,204 @@
       "userId": "u-1",
       "userName": "Robert Jenkins",
       "input": {
+        "soilType": "Loamy",
+        "soilMoisture": 35,
+        "nitrogen": 50,
+        "phosphorus": 40,
+        "potassium": 40,
+        "temperature": 25,
+        "humidity": 60,
+        "rainfall": 100,
+        "phValue": 6.5,
+        "location": "Punjab, India"
+      },
+      "result": {
+        "bestCrop": "Wheat",
+        "confidence": 85,
+        "suitableFertilizers": [
+          "NPK 15-15-15",
+          "Compost Manure"
+        ],
+        "irrigationRecommendation": "Apply moderate irrigation at critical crown-root initiation stage.",
+        "diseasePrevention": [
+          "Treat seed with fungicide",
+          "Ensure proper spacing"
+        ],
+        "seasonalAdvice": "Avoid sowing in waterlogged soil conditions.",
+        "weatherAwareness": "Monitor local dry-spell forecasts for additional watering cycles.",
+        "farmingTips": [
+          "Sow at a depth of 5cm",
+          "Control weeds early"
+        ],
+        "riskLevel": "Low",
+        "explanation": "Based on the specified parameters, soil nitrogen, temperature, and moisture are highly suitable for high-yield grains."
+      },
+      "id": "p-1783266942123",
+      "timestamp": "2026-07-05T15:55:42.123Z"
+    },
+    {
+      "userId": "u-1",
+      "userName": "Robert Jenkins",
+      "input": {
+        "soilType": "Loamy",
+        "soilMoisture": 30,
+        "nitrogen": 40,
+        "phosphorus": 50,
+        "potassium": 60,
+        "temperature": 18,
+        "humidity": 55,
+        "rainfall": 80,
+        "phValue": 5.1,
+        "location": "Nilgiris, Tamil Nadu, India"
+      },
+      "result": {
+        "bestCrop": "Potatoes",
+        "confidence": 88.5,
+        "suitableFertilizers": [
+          "Ammonium Nitrate",
+          "Potassium Sulfate",
+          "Bone Meal"
+        ],
+        "irrigationRecommendation": "Regular, even watering to prevent tuber cracking and maintain uniform sizes.",
+        "diseasePrevention": [
+          "Use certified disease-free seed tubers",
+          "Spray preventative organic fungicides for late blight"
+        ],
+        "seasonalAdvice": "Plant in hilled-up rows to encourage maximum tuber development in acidic soil.",
+        "weatherAwareness": "Cooler temperatures forecast will promote robust tuberization.",
+        "farmingTips": [
+          "Ensure proper hilling of soil around vines",
+          "Harvest after foliage completely dies back"
+        ],
+        "riskLevel": "Low",
+        "explanation": "Acidic soils (pH: 5.1) are perfect for preventing common scab on potatoes, and loamy/clayey structures support robust tuber expansion."
+      },
+      "id": "p-1783250181336",
+      "timestamp": "2026-07-05T11:16:21.336Z"
+    },
+    {
+      "userId": "u-1",
+      "userName": "Robert Jenkins",
+      "input": {
+        "soilType": "Sandy",
+        "soilMoisture": 35,
+        "nitrogen": 50,
+        "phosphorus": 40,
+        "potassium": 40,
+        "temperature": 25,
+        "humidity": 60,
+        "rainfall": 100,
+        "phValue": 6.5,
+        "location": "kerala, India"
+      },
+      "result": {
+        "bestCrop": "Millet (Bajra)",
+        "confidence": 90.5,
+        "suitableFertilizers": [
+          "Farmyard Manure",
+          "NPK 12-32-16",
+          "Zinc Sulfate"
+        ],
+        "irrigationRecommendation": "Extremely drought tolerant. Supplemental irrigation needed only if dry spell exceeds 21 days.",
+        "diseasePrevention": [
+          "Sow treated seeds for downy mildew prevention",
+          "Perform rogueing of ergot-infected spikes"
+        ],
+        "seasonalAdvice": "Highly suited for sandy soil beds with low water holding capacity. Plant early in the season.",
+        "weatherAwareness": "Resilient to expected heatwaves. No extra irrigation actions needed.",
+        "farmingTips": [
+          "Maintain shallow sowing depth (2-3cm)",
+          "Adopt mixed cropping with pulses like green gram"
+        ],
+        "riskLevel": "Low",
+        "explanation": "Sandy soil holds very little water (Moisture: 35%), which would kill other crops. Millet is exceptionally hardy and excels in warm, well-drained, slightly alkaline soils."
+      },
+      "id": "p-1783249870185",
+      "timestamp": "2026-07-05T11:11:10.185Z"
+    },
+    {
+      "userId": "u-1",
+      "userName": "Robert Jenkins",
+      "input": {
+        "soilType": "Clayey",
+        "soilMoisture": 35,
+        "nitrogen": 50,
+        "phosphorus": 40,
+        "potassium": 40,
+        "temperature": 25,
+        "humidity": 60,
+        "rainfall": 100,
+        "phValue": 6.5,
+        "location": "kerala, India"
+      },
+      "result": {
+        "bestCrop": "Rice (Paddy)",
+        "confidence": 91.2,
+        "suitableFertilizers": [
+          "Ammonium Sulfate",
+          "Single Superphosphate (SSP)",
+          "Muriate of Potash"
+        ],
+        "irrigationRecommendation": "Paddy requires continuous shallow flooding. Keep standing water at 5-10cm.",
+        "diseasePrevention": [
+          "Protect from Rice Blast",
+          "Monitor for stem borers and use organic bio-pesticides"
+        ],
+        "seasonalAdvice": "Transplant in early morning. Clay soil retains water perfectly for paddy fields.",
+        "weatherAwareness": "Heavy rainfall aligns with rice water demands; ensure drainage bunds are stable.",
+        "farmingTips": [
+          "Practice line-sowing for higher tillering",
+          "Incorporate organic green manure post-harvest"
+        ],
+        "riskLevel": "Medium",
+        "explanation": "High clay content (Clayey) and abundant water (Moisture: 35%, Rainfall: 100mm) provide the exact heavy, water-retentive environment required for high-grade Rice cultivation."
+      },
+      "id": "p-1783249861514",
+      "timestamp": "2026-07-05T11:11:01.514Z"
+    },
+    {
+      "userId": "u-1",
+      "userName": "Robert Jenkins",
+      "input": {
+        "soilType": "Loamy",
+        "soilMoisture": 35,
+        "nitrogen": 50,
+        "phosphorus": 40,
+        "potassium": 40,
+        "temperature": 25,
+        "humidity": 60,
+        "rainfall": 100,
+        "phValue": 6.5,
+        "location": "kerala, India"
+      },
+      "result": {
+        "bestCrop": "Wheat",
+        "confidence": 85,
+        "suitableFertilizers": [
+          "NPK 15-15-15",
+          "Compost Manure"
+        ],
+        "irrigationRecommendation": "Apply moderate irrigation at critical crown-root initiation stage.",
+        "diseasePrevention": [
+          "Treat seed with fungicide",
+          "Ensure proper spacing"
+        ],
+        "seasonalAdvice": "Avoid sowing in waterlogged soil conditions.",
+        "weatherAwareness": "Monitor local dry-spell forecasts for additional watering cycles.",
+        "farmingTips": [
+          "Sow at a depth of 5cm",
+          "Control weeds early"
+        ],
+        "riskLevel": "Low",
+        "explanation": "Based on the specified parameters, soil nitrogen, temperature, and moisture are highly suitable for high-yield grains."
+      },
+      "id": "p-1783249851130",
+      "timestamp": "2026-07-05T11:10:51.130Z"
+    },
+    {
+      "userId": "u-1",
+      "userName": "Robert Jenkins",
+      "input": {
         "soilType": "Clayey",
         "soilMoisture": 52,
         "nitrogen": 65,
@@ -467,6 +665,134 @@
     }
   ],
   "activityLogs": [
+    {
+      "id": "l-1783448168360-iivq",
+      "userId": "u-1",
+      "userName": "Robert Jenkins",
+      "action": "USER_LOGIN",
+      "details": "Successfully logged in from UI.",
+      "timestamp": "2026-07-07T18:16:08.360Z"
+    },
+    {
+      "id": "l-1783447531889-le1n",
+      "userId": "u-1",
+      "userName": "Robert Jenkins",
+      "action": "USER_LOGIN",
+      "details": "Successfully logged in from UI.",
+      "timestamp": "2026-07-07T18:05:31.889Z"
+    },
+    {
+      "id": "l-1783446512360-m4h1",
+      "userId": "u-1",
+      "userName": "Robert Jenkins",
+      "action": "USER_LOGIN",
+      "details": "Successfully logged in from UI.",
+      "timestamp": "2026-07-07T17:48:32.360Z"
+    },
+    {
+      "id": "l-1783444212965-fzw6",
+      "userId": "u-1",
+      "userName": "Robert Jenkins",
+      "action": "USER_LOGIN",
+      "details": "Successfully logged in from UI.",
+      "timestamp": "2026-07-07T17:10:12.965Z"
+    },
+    {
+      "id": "l-1783266942126-6269",
+      "userId": "u-1",
+      "userName": "Robert Jenkins",
+      "action": "CROP_PREDICTION",
+      "details": "Generated recommendations for Wheat (85% confidence)",
+      "timestamp": "2026-07-05T15:55:42.126Z"
+    },
+    {
+      "id": "l-1783266921234-kmns",
+      "userId": "u-1",
+      "userName": "Robert Jenkins",
+      "action": "USER_LOGIN",
+      "details": "Successfully logged in from UI.",
+      "timestamp": "2026-07-05T15:55:21.234Z"
+    },
+    {
+      "id": "l-1783266887421-r26l",
+      "userId": "u-1",
+      "userName": "Robert Jenkins",
+      "action": "USER_LOGIN",
+      "details": "Successfully logged in from UI.",
+      "timestamp": "2026-07-05T15:54:47.421Z"
+    },
+    {
+      "id": "l-1783266194141-ekoj",
+      "userId": "u-1",
+      "userName": "Robert Jenkins",
+      "action": "USER_LOGIN",
+      "details": "Successfully logged in from UI.",
+      "timestamp": "2026-07-05T15:43:14.142Z"
+    },
+    {
+      "id": "l-1783250181423-wkat",
+      "userId": "u-1",
+      "userName": "Robert Jenkins",
+      "action": "CROP_PREDICTION",
+      "details": "Generated recommendations for Potatoes (88.5% confidence)",
+      "timestamp": "2026-07-05T11:16:21.423Z"
+    },
+    {
+      "id": "l-1783249870197-0yvb",
+      "userId": "u-1",
+      "userName": "Robert Jenkins",
+      "action": "CROP_PREDICTION",
+      "details": "Generated recommendations for Millet (Bajra) (90.5% confidence)",
+      "timestamp": "2026-07-05T11:11:10.197Z"
+    },
+    {
+      "id": "l-1783249861566-91v0",
+      "userId": "u-1",
+      "userName": "Robert Jenkins",
+      "action": "CROP_PREDICTION",
+      "details": "Generated recommendations for Rice (Paddy) (91.2% confidence)",
+      "timestamp": "2026-07-05T11:11:01.566Z"
+    },
+    {
+      "id": "l-1783249851137-2d8i",
+      "userId": "u-1",
+      "userName": "Robert Jenkins",
+      "action": "CROP_PREDICTION",
+      "details": "Generated recommendations for Wheat (85% confidence)",
+      "timestamp": "2026-07-05T11:10:51.137Z"
+    },
+    {
+      "id": "l-1783249703120-0om8",
+      "userId": "u-1",
+      "userName": "Robert Jenkins",
+      "action": "USER_LOGIN",
+      "details": "Successfully logged in from UI.",
+      "timestamp": "2026-07-05T11:08:23.120Z"
+    },
+    {
+      "id": "l-1783249496765-6hv6",
+      "userId": "u-1",
+      "userName": "Robert Jenkins",
+      "action": "USER_LOGIN",
+      "details": "Successfully logged in from UI.",
+      "timestamp": "2026-07-05T11:04:56.765Z"
+    },
+    {
+      "id": "l-1783249241202-zg33",
+      "userId": "u-1783233183609",
+      "userName": "Dharnishkumar",
+      "action": "USER_LOGIN",
+      "details": "Successfully logged in from UI.",
+      "timestamp": "2026-07-05T11:00:41.202Z"
+    },
+    {
+      "id": "l-1783248534419-dfiq",
+      "userId": "u-1",
+      "userName": "Robert Jenkins",
+      "action": "USER_LOGIN",
+      "details": "Successfully logged in from UI.",
+      "timestamp": "2026-07-05T10:48:54.419Z"
+    },
     {
       "id": "l-1783243549819-wsmy",
       "userId": "u-1",

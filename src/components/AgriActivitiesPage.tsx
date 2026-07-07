@@ -260,7 +260,7 @@ export function AgriActivitiesPage({ theme, language }: AgriActivitiesPageProps)
   return (
     <div className="space-y-8 animate-fade-in-up">
       {/* HEADER SECTION */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b dark:border-slate-800 pb-5">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b-[0.5px] dark:border-slate-800/60 pb-5">
         <div>
           <h1 className="text-xl sm:text-2xl font-black text-slate-800 dark:text-slate-100 flex items-center gap-2.5">
             <Calendar className="w-6 h-6 text-emerald-500" />
@@ -308,16 +308,16 @@ export function AgriActivitiesPage({ theme, language }: AgriActivitiesPageProps)
         
         {/* LEFT COLUMN: DISTRICT WEATHER REPORT */}
         <div className="lg:col-span-1 space-y-6">
-          <div className={`p-6 rounded-3xl border transition-all duration-300 ${
+          <div className={`p-6 rounded-3xl border-[0.5px] transition-all duration-300 ${
             theme === 'dark' 
-              ? 'bg-slate-900/40 border-slate-800/80 hover:bg-slate-900/50' 
-              : 'bg-white border-slate-200 shadow-md shadow-slate-100/50'
+              ? 'bg-slate-900/40 border-slate-800/40 hover:bg-slate-900/50' 
+              : 'bg-white border-slate-200/60 shadow-md shadow-slate-100/50'
           }`}>
-            <div className="flex justify-between items-center pb-4 border-b dark:border-slate-800">
+            <div className="flex justify-between items-center pb-4 border-b-[0.5px] dark:border-slate-800/60">
               <h2 className="text-xs font-mono font-bold tracking-widest text-slate-400 uppercase">
                 {selectedDistrict} Weather telemetry
               </h2>
-              <span className="flex items-center gap-1 text-[9px] font-mono text-emerald-500 font-bold bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
+              <span className="flex items-center gap-1 text-[9px] font-mono text-emerald-500 font-bold bg-emerald-500/10 px-2 py-0.5 rounded-full border-[0.5px] border-emerald-500/20">
                 <CloudSun className="w-3 h-3" /> Live Query
               </span>
             </div>
@@ -358,7 +358,7 @@ export function AgriActivitiesPage({ theme, language }: AgriActivitiesPageProps)
             </div>
 
             {/* Meteorological Advisory */}
-            <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/20 space-y-2">
+            <div className="p-4 rounded-2xl bg-amber-500/10 border-[0.5px] border-amber-500/20 space-y-2">
               <div className="flex items-center gap-2 text-amber-500">
                 <Info className="w-4 h-4" />
                 <span className="text-[10px] font-mono font-bold uppercase tracking-wider">Agronomist Advisory</span>
@@ -372,13 +372,13 @@ export function AgriActivitiesPage({ theme, language }: AgriActivitiesPageProps)
 
         {/* RIGHT COLUMN: MAIN ACTIVITIES TIMELINE GRAPH */}
         <div className="lg:col-span-2 space-y-6">
-          <div className={`p-6 rounded-3xl border transition-all duration-300 ${
+          <div className={`p-6 rounded-3xl border-[0.5px] transition-all duration-300 ${
             theme === 'dark' 
-              ? 'bg-slate-900/40 border-slate-800/80' 
-              : 'bg-white border-slate-200 shadow-md shadow-slate-100/50'
+              ? 'bg-slate-900/40 border-slate-800/40' 
+              : 'bg-white border-slate-200/60 shadow-md shadow-slate-100/50'
           }`}>
             
-            <div className="flex justify-between items-center pb-4 border-b dark:border-slate-800 mb-6">
+            <div className="flex justify-between items-center pb-4 border-b-[0.5px] dark:border-slate-800/60 mb-6">
               <div className="flex items-center gap-2">
                 <TrendingUp className="w-4 h-4 text-emerald-500" />
                 <h2 className="text-xs font-mono font-bold tracking-widest text-slate-400 uppercase">
@@ -404,10 +404,10 @@ export function AgriActivitiesPage({ theme, language }: AgriActivitiesPageProps)
                     </div>
 
                     {/* Timeline Table/Grid */}
-                    <div className="border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden bg-slate-950/20">
+                    <div className="border-[0.5px] border-slate-200/50 dark:border-slate-800/50 rounded-2xl overflow-hidden bg-slate-950/20">
                       
                       {/* Months Header Row */}
-                      <div className="grid grid-cols-12 border-b border-slate-200 dark:border-slate-800 bg-slate-100/60 dark:bg-slate-900/60 py-1.5 text-center">
+                      <div className="grid grid-cols-12 border-b-[0.5px] border-slate-200/50 dark:border-slate-800/50 bg-slate-100/60 dark:bg-slate-900/60 py-1.5 text-center">
                         {MONTHS_LIST.map((mon, mIdx) => (
                           <div key={mIdx} className="text-[9px] font-bold text-slate-400 font-mono">
                             {mon}
@@ -416,7 +416,7 @@ export function AgriActivitiesPage({ theme, language }: AgriActivitiesPageProps)
                       </div>
 
                       {/* Activities Rows */}
-                      <div className="divide-y divide-slate-150 dark:divide-slate-850 p-2 space-y-2.5">
+                      <div className="divide-y-[0.5px] divide-slate-150/40 dark:divide-slate-850/40 p-2 space-y-2.5">
                         {crop.activities.map((act, actIdx) => (
                           <div key={actIdx} className="pt-2">
                             

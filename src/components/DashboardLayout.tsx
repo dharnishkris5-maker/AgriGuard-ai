@@ -23,7 +23,16 @@ import {
   ShieldAlert,
   Compass,
   Send,
-  LineChart
+  LineChart,
+  Mail,
+  MapPin,
+  Building,
+  Phone,
+  Calendar,
+  ChevronDown,
+  ChevronUp,
+  Database,
+  Clock
 } from 'lucide-react';
 import { User as UserType, Notification, PredictionHistory } from '../types/index.js';
 
@@ -70,6 +79,34 @@ export function DashboardLayout({
       text: 'Hello! I am AgriGuard Navigator. Tell me where to go (e.g. "weather", "fertilizers", "home") or use the shortcuts below!'
     }
   ]);
+
+  // Profile modal and user history states
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
+  const [adminUsers, setAdminUsers] = useState<UserType[]>([]);
+  const [adminPredictions, setAdminPredictions] = useState<PredictionHistory[]>([]);
+  const [adminLogs, setAdminLogs] = useState<ActivityLog[]>([]);
+  const [expandedUserId, setExpandedUserId] = useState<string | null>(null);
+  const [activeProfileTab, setActiveProfileTab] = useState<'details' | 'history' | 'users' | 'logs'>('details');
+
+  const handleOpenProfileModal = async () => {
+    setIsProfileModalOpen(true);
+    setActiveProfileTab('details');
+    setExpandedUserId(null);
+    if (user.role === 'Admin') {
+      try {
+        const [usersRes, predsRes, logsRes] = await Promise.all([
+          fetch('/api/users'),
+          fetch('/api/predictions'),
+          fetch('/api/logs')
+        ]);
+        if (usersRes.ok) setAdminUsers(await usersRes.json());
+        if (predsRes.ok) setAdminPredictions(await predsRes.json());
+        if (logsRes.ok) setAdminLogs(await logsRes.json());
+      } catch (err) {
+        console.error('Error fetching admin data for profile modal:', err);
+      }
+    }
+  };
 
   const getAgriResponse = (query: string): string => {
     const q = query.toLowerCase();
@@ -260,7 +297,8 @@ export function DashboardLayout({
   };
 
   return (
-    <div className={`h-full w-full overflow-hidden font-sans flex dashboard-layout-root ${theme === 'dark' ? 'bg-slate-950/45 backdrop-blur-md text-slate-100' : 'bg-[#F8FAFC]/45 backdrop-blur-md text-slate-800 light-theme'}`}>
+    <>
+      <div className={`h-full w-full overflow-hidden font-sans flex dashboard-layout-root ${theme === 'dark' ? 'bg-slate-950/45 backdrop-blur-md text-slate-100' : 'bg-[#F8FAFC]/45 backdrop-blur-md text-slate-800 light-theme'}`}>
       
       {/* SIDEBAR - DESKTOP */}
       <aside className="hidden md:flex flex-col w-64 bg-[#0F172A] border-r border-slate-800 shrink-0">
@@ -404,10 +442,16 @@ export function DashboardLayout({
             </div>
 
             {/* Profile */}
-            <div className="p-3 my-4 rounded-xl bg-slate-800/40 border border-slate-700/30">
+            <button
+              onClick={() => {
+                setIsMobileOpen(false);
+                handleOpenProfileModal();
+              }}
+              className="w-full text-left p-3 my-4 rounded-xl bg-slate-800/40 border border-slate-700/30 hover:bg-slate-800/60 transition-all cursor-pointer outline-none"
+            >
               <p className="text-xs font-semibold truncate text-white">{user.name}</p>
               <p className="text-[10px] text-slate-500 mt-0.5">{user.role}</p>
-            </div>
+            </button>
 
             {/* Nav */}
             <nav className="flex-1 space-y-1">
@@ -527,7 +571,10 @@ export function DashboardLayout({
             </div>
 
             {/* Quick Profile trigger */}
-            <div className="flex items-center gap-3 border-l border-slate-200 dark:border-slate-800 pl-4">
+            <button
+              onClick={handleOpenProfileModal}
+              className="flex items-center gap-3 border-l border-slate-200 dark:border-slate-800 pl-4 cursor-pointer hover:opacity-85 transition-opacity outline-none text-left"
+            >
               <div className="text-right">
                 <span className="text-xs font-bold text-slate-900 dark:text-slate-100 block leading-none">{user.name}</span>
                 <span className="text-[10px] text-slate-400 font-medium uppercase tracking-tighter italic">{user.role}</span>
@@ -535,13 +582,15 @@ export function DashboardLayout({
               <div className="w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-800 border-2 border-emerald-100 dark:border-emerald-950 overflow-hidden flex items-center justify-center text-slate-700 dark:text-slate-300 font-bold text-sm">
                 {user.name.charAt(0)}
               </div>
-            </div>
+            </button>
           </div>
         </header>
 
         {/* PAGE CONTENT CONTAINER */}
-        <main id="main-content-area" className="flex-1 overflow-y-auto p-4 md:p-8 pt-20 md:pt-8">
-          {children}
+        <main id="main-content-area" className="flex-1 overflow-y-auto p-4 md:p-8 pt-20 md:pt-8 perspective-container">
+          <div className="page-3d-card rounded-[28px] p-2 bg-slate-900/10 dark:bg-slate-950/10 backdrop-blur-[1px]">
+            {children}
+          </div>
         </main>
 
         {/* FLOATING AI NAVIGATOR WIDGET */}
@@ -638,5 +687,322 @@ export function DashboardLayout({
         </div>
       </div>
     </div>
+
+    {/* USER PROFILE DETAILS & HISTORY MODAL */}
+      {isProfileModalOpen && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-fade-in text-white">
+          <div className={`relative w-full max-w-2xl h-[550px] flex flex-col rounded-3xl border shadow-2xl overflow-hidden animate-scale-in ${
+            theme === 'dark' ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200 text-slate-800'
+          }`}>
+            
+            {/* Modal Header */}
+            <div className="p-5 border-b flex justify-between items-center shrink-0 border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/20">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 font-bold text-base shadow-sm">
+                  {user.name.charAt(0)}
+                </div>
+                <div>
+                  <h3 className="text-sm font-black">{user.name}</h3>
+                  <div className="flex items-center gap-2 mt-0.5">
+                    <span className={`px-1.5 py-0.5 rounded-full text-[8px] font-mono font-bold uppercase tracking-wider ${
+                      user.role === 'Admin' 
+                        ? 'bg-red-500/15 text-red-400 border border-red-500/25' 
+                        : user.role === 'Agricultural Officer' 
+                        ? 'bg-blue-500/15 text-blue-400 border border-blue-500/25'
+                        : 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/25'
+                    }`}>
+                      {user.role}
+                    </span>
+                    <span className="text-[9px] text-slate-500 font-mono">ID: {user.id}</span>
+                  </div>
+                </div>
+              </div>
+              <button 
+                onClick={() => setIsProfileModalOpen(false)}
+                className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/40 transition-colors cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Modal Tab Selector */}
+            <div className="flex gap-4 px-5 border-b border-slate-200 dark:border-slate-800 shrink-0 bg-slate-50/30 dark:bg-slate-950/10">
+              <button
+                onClick={() => setActiveProfileTab('details')}
+                className={`py-3.5 text-xs font-bold border-b-2 transition-all cursor-pointer ${
+                  activeProfileTab === 'details'
+                    ? 'border-emerald-500 text-emerald-500'
+                    : 'border-transparent text-slate-400 hover:text-slate-200'
+                }`}
+              >
+                Profile Details
+              </button>
+
+              {user.role !== 'Admin' ? (
+                <button
+                  onClick={() => setActiveProfileTab('history')}
+                  className={`py-3.5 text-xs font-bold border-b-2 transition-all cursor-pointer ${
+                    activeProfileTab === 'history'
+                      ? 'border-emerald-500 text-emerald-500'
+                      : 'border-transparent text-slate-400 hover:text-slate-200'
+                  }`}
+                >
+                  My Analysis History ({predictions.length})
+                </button>
+              ) : (
+                <>
+                  <button
+                    onClick={() => setActiveProfileTab('users')}
+                    className={`py-3.5 text-xs font-bold border-b-2 transition-all cursor-pointer ${
+                      activeProfileTab === 'users'
+                        ? 'border-emerald-500 text-emerald-500'
+                        : 'border-transparent text-slate-400 hover:text-slate-200'
+                    }`}
+                  >
+                    User Registry ({adminUsers.length})
+                  </button>
+                  <button
+                    onClick={() => setActiveProfileTab('logs')}
+                    className={`py-3.5 text-xs font-bold border-b-2 transition-all cursor-pointer ${
+                      activeProfileTab === 'logs'
+                        ? 'border-emerald-500 text-emerald-500'
+                        : 'border-transparent text-slate-400 hover:text-slate-200'
+                    }`}
+                  >
+                    Security Logs
+                  </button>
+                </>
+              )}
+            </div>
+
+            {/* Modal Content */}
+            <div className="flex-1 overflow-y-auto p-5 space-y-4 scrollbar-thin">
+              {activeProfileTab === 'details' && (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-left">
+                  <div className="p-3.5 rounded-2xl bg-slate-100/50 dark:bg-slate-900/40 border dark:border-slate-800/80 flex gap-3">
+                    <User className="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" />
+                    <div>
+                      <span className="text-[8px] font-mono text-slate-400 uppercase tracking-widest block">Operator Name</span>
+                      <span className="text-xs font-semibold">{user.name}</span>
+                    </div>
+                  </div>
+
+                  <div className="p-3.5 rounded-2xl bg-slate-100/50 dark:bg-slate-900/40 border dark:border-slate-800/80 flex gap-3">
+                    <Mail className="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" />
+                    <div className="min-w-0">
+                      <span className="text-[8px] font-mono text-slate-400 uppercase tracking-widest block">Registered Email</span>
+                      <span className="text-xs font-semibold block truncate">{user.email}</span>
+                    </div>
+                  </div>
+
+                  <div className="p-3.5 rounded-2xl bg-slate-100/50 dark:bg-slate-900/40 border dark:border-slate-800/80 flex gap-3">
+                    <Phone className="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" />
+                    <div>
+                      <span className="text-[8px] font-mono text-slate-400 uppercase tracking-widest block">Telephone Contact</span>
+                      <span className="text-xs font-semibold">{user.phone || 'Not Configured'}</span>
+                    </div>
+                  </div>
+
+                  <div className="p-3.5 rounded-2xl bg-slate-100/50 dark:bg-slate-900/40 border dark:border-slate-800/80 flex gap-3">
+                    <MapPin className="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" />
+                    <div>
+                      <span className="text-[8px] font-mono text-slate-400 uppercase tracking-widest block">Region / Location</span>
+                      <span className="text-xs font-semibold">{user.location || 'Not Configured'}</span>
+                    </div>
+                  </div>
+
+                  <div className="p-3.5 rounded-2xl bg-slate-100/50 dark:bg-slate-900/40 border dark:border-slate-800/80 flex gap-3">
+                    <Building className="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" />
+                    <div>
+                      <span className="text-[8px] font-mono text-slate-400 uppercase tracking-widest block">Agronomic Organization</span>
+                      <span className="text-xs font-semibold">{user.organization || 'Not Configured'}</span>
+                    </div>
+                  </div>
+
+                  <div className="p-3.5 rounded-2xl bg-slate-100/50 dark:bg-slate-900/40 border dark:border-slate-800/80 flex gap-3">
+                    <Calendar className="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" />
+                    <div>
+                      <span className="text-[8px] font-mono text-slate-400 uppercase tracking-widest block">Authorization Sown</span>
+                      <span className="text-xs font-semibold font-mono">{new Date(user.createdAt).toLocaleDateString()}</span>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {activeProfileTab === 'history' && (
+                <div className="space-y-3 text-left">
+                  {predictions.length === 0 ? (
+                    <div className="text-center py-12">
+                      <History className="w-10 h-10 text-slate-500 dark:text-slate-600 mx-auto mb-2" />
+                      <p className="text-xs text-slate-500 italic">No recommendations run yet.</p>
+                    </div>
+                  ) : (
+                    predictions.map(pred => (
+                      <div key={pred.id} className="p-3.5 rounded-2xl bg-slate-100/40 dark:bg-slate-800/20 border dark:border-slate-800 flex justify-between gap-3 text-xs">
+                        <div className="space-y-1.5 min-w-0">
+                          <div className="flex flex-wrap items-center gap-2">
+                            <span className="px-2 py-0.5 rounded-full text-[8px] font-mono font-bold uppercase bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                              {pred.result.bestCrop}
+                            </span>
+                            <span className="text-[9px] text-slate-500 font-mono">
+                              {new Date(pred.timestamp).toLocaleDateString()}
+                            </span>
+                          </div>
+                          <p className="text-[11px] text-slate-400 leading-relaxed truncate">
+                            {pred.result.explanation}
+                          </p>
+                          <div className="flex flex-wrap gap-2 text-[9px] text-slate-500">
+                            <span>📍 {pred.input.location}</span>
+                            <span>🧪 pH {pred.input.phValue}</span>
+                            <span>💧 {pred.input.soilMoisture}%</span>
+                            <span className="font-mono text-emerald-500/80">N {pred.input.nitrogen} P {pred.input.phosphorus} K {pred.input.potassium}</span>
+                          </div>
+                        </div>
+                        <div className="flex flex-col justify-between items-end gap-1 shrink-0 text-right">
+                          <div>
+                            <span className="text-[8px] text-slate-400 block font-mono">CONFIDENCE</span>
+                            <span className="text-xs font-black text-emerald-400 font-mono">{pred.result.confidence.toFixed(0)}%</span>
+                          </div>
+                          <span className={`px-1.5 py-0.5 rounded-full text-[8px] font-bold uppercase ${
+                            pred.result.riskLevel === 'High' ? 'bg-red-500/10 text-red-500' : pred.result.riskLevel === 'Medium' ? 'bg-amber-500/10 text-amber-500' : 'bg-emerald-500/10 text-emerald-500'
+                          }`}>
+                            {pred.result.riskLevel}
+                          </span>
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
+              )}
+
+              {activeProfileTab === 'users' && (
+                <div className="space-y-2.5 text-left">
+                  {adminUsers.map(u => {
+                    const isExpanded = expandedUserId === u.id;
+                    const userPreds = adminPredictions.filter(p => p.userId === u.id);
+                    return (
+                      <div key={u.id} className="rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden text-xs">
+                        <button
+                          onClick={() => setExpandedUserId(isExpanded ? null : u.id)}
+                          className="w-full p-3.5 flex justify-between items-center text-left bg-slate-50/50 hover:bg-slate-100/50 dark:bg-slate-900/20 dark:hover:bg-slate-800/30 transition-all cursor-pointer border-none outline-none"
+                        >
+                          <div className="flex items-center gap-3">
+                            <div className="w-8 h-8 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center font-bold text-xs text-emerald-400 uppercase">
+                              {u.name.charAt(0)}
+                            </div>
+                            <div>
+                              <span className="text-xs font-bold block">{u.name}</span>
+                              <span className="text-[9px] font-mono text-slate-500">{u.email}</span>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-2.5">
+                            <span className={`px-2 py-0.5 rounded-full text-[8px] font-mono font-bold uppercase tracking-wider ${
+                              u.role === 'Admin' ? 'bg-red-500/10 text-red-400' : u.role === 'Agricultural Officer' ? 'bg-blue-500/10 text-blue-400' : 'bg-emerald-500/10 text-emerald-400'
+                            }`}>
+                              {u.role}
+                            </span>
+                            {isExpanded ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
+                          </div>
+                        </button>
+                        
+                        {isExpanded && (
+                          <div className="p-3.5 bg-slate-50/30 dark:bg-slate-900/10 border-t border-slate-200 dark:border-slate-800 space-y-3.5">
+                            {/* User details registry info */}
+                            <div className="grid grid-cols-2 gap-3 text-[10px] bg-slate-100/50 dark:bg-slate-850/35 p-3 rounded-xl">
+                              <div>
+                                <span className="text-slate-400 block uppercase font-mono tracking-widest text-[8px]">Phone Contact</span>
+                                <span className="font-semibold">{u.phone || 'Not Configured'}</span>
+                              </div>
+                              <div>
+                                <span className="text-slate-400 block uppercase font-mono tracking-widest text-[8px]">Registered Location</span>
+                                <span className="font-semibold">{u.location || 'Not Configured'}</span>
+                              </div>
+                              <div>
+                                <span className="text-slate-400 block uppercase font-mono tracking-widest text-[8px]">Agri Organization</span>
+                                <span className="font-semibold">{u.organization || 'Not Configured'}</span>
+                              </div>
+                              <div>
+                                <span className="text-slate-400 block uppercase font-mono tracking-widest text-[8px]">Clearance Sown Date</span>
+                                <span className="font-semibold font-mono">{new Date(u.createdAt).toLocaleDateString()}</span>
+                              </div>
+                            </div>
+
+                            {/* User specific history registry info */}
+                            <div className="space-y-2">
+                              <h4 className="text-[10px] font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
+                                <Database className="w-3.5 h-3.5 text-emerald-500" /> Crop Recommendation History ({userPreds.length})
+                              </h4>
+                              {userPreds.length === 0 ? (
+                                <p className="text-[10px] text-slate-400 italic">No diagnostic simulations generated yet.</p>
+                              ) : (
+                                <div className="space-y-2 max-h-40 overflow-y-auto pr-1">
+                                  {userPreds.map(p => (
+                                    <div key={p.id} className="p-2.5 rounded-xl bg-slate-100/35 dark:bg-slate-800/20 border dark:border-slate-800/80 flex justify-between items-center gap-2">
+                                      <div>
+                                        <div className="flex items-center gap-1.5">
+                                          <span className="text-xs font-bold text-emerald-400">{p.result.bestCrop}</span>
+                                          <span className="text-[8px] text-slate-500 font-mono">({new Date(p.timestamp).toLocaleDateString()})</span>
+                                        </div>
+                                        <span className="text-[9px] text-slate-400 font-mono block mt-0.5">
+                                          📍 {p.input.location} • N-P-K: {p.input.nitrogen}-{p.input.phosphorus}-{p.input.potassium}
+                                        </span>
+                                      </div>
+                                      <div className="text-right shrink-0">
+                                        <span className="text-[10px] font-mono font-bold text-emerald-500 block leading-tight">{p.result.confidence.toFixed(0)}%</span>
+                                        <span className="text-[8px] uppercase tracking-wider block text-slate-500 font-bold">{p.result.riskLevel} Risk</span>
+                                      </div>
+                                    </div>
+                                  ))}
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+
+              {activeProfileTab === 'logs' && (
+                <div className="space-y-2 text-left">
+                  {adminLogs.length === 0 ? (
+                    <p className="text-xs text-slate-400 italic text-center py-6">No action audit logs recorded.</p>
+                  ) : (
+                    adminLogs.map(log => (
+                      <div key={log.id} className="p-3 rounded-xl bg-slate-100/50 dark:bg-slate-900/30 border dark:border-slate-800 flex justify-between items-start gap-3 text-xs">
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <span className="font-bold text-slate-700 dark:text-slate-300">{log.userName}</span>
+                            <span className="px-1.5 py-0.5 rounded bg-slate-200 dark:bg-slate-800 text-[8px] font-mono uppercase tracking-wider font-bold">
+                              {log.action}
+                            </span>
+                          </div>
+                          <p className="text-[10px] text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">{log.details}</p>
+                        </div>
+                        <span className="text-[9px] font-mono text-slate-400 shrink-0">
+                          {new Date(log.timestamp).toLocaleTimeString()}
+                        </span>
+                      </div>
+                    ))
+                  )}
+                </div>
+              )}
+            </div>
+
+            {/* Modal Footer */}
+            <div className="p-4 border-t flex justify-end shrink-0 border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/20">
+              <button
+                onClick={() => setIsProfileModalOpen(false)}
+                className="px-4 py-2 bg-slate-200 hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-750 text-slate-700 dark:text-slate-200 font-bold text-xs rounded-xl cursor-pointer"
+              >
+                Dismiss Window
+              </button>
+            </div>
+
+          </div>
+        </div>
+      )}
+    </>
   );
 }

@@ -588,6 +588,11 @@ Generate a premium-grade crop analytics response. Your response MUST be valid JS
     res.json(db.getActivityLogs());
   });
 
+  // API Route - Get All Users (Admin Only)
+  app.get('/api/users', (req, res) => {
+    res.json(db.getUsers());
+  });
+
   // API Route - Weather Forecasting (Calculated dynamic agricultural weather)
   app.get('/api/weather', (req, res) => {
     const { location } = req.query;

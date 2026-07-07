@@ -86,7 +86,7 @@ export default function App() {
   const [isRainy, setIsRainy] = useState(false);
   const [accessibility, setAccessibility] = useState({
     largeText: false,
-    highContrast: false
+    highContrast: true
   });
 
   useEffect(() => {
@@ -302,22 +302,22 @@ export default function App() {
   };
 
   return (
-    <div 
-      className={`${accessibility.largeText ? 'text-lg' : 'text-sm'} ${accessibility.highContrast ? 'contrast-125 saturate-150' : ''}`}
-      style={{
-        backgroundImage: getBackgroundImage(),
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundAttachment: 'fixed',
-        transition: 'background-image 0.5s ease-in-out'
-      }}
-    >
-      <div className={`${currentUser ? 'h-screen overflow-hidden' : 'min-h-screen'} bg-slate-950/60 backdrop-blur-[2px] text-white`}>
-        
-        {/* Canvas Rain Animation Overlay */}
-        {!currentUser ? (
-          /* LANDING LAYOUT */
-          <>
+    <>
+      <div 
+        className={`${accessibility.largeText ? 'text-lg' : 'text-sm'} ${accessibility.highContrast ? 'contrast-125 saturate-150 high-contrast-active' : ''}`}
+        style={{
+          backgroundImage: getBackgroundImage(),
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundAttachment: 'fixed',
+          transition: 'background-image 0.5s ease-in-out'
+        }}
+      >
+        <div className={`${currentUser ? 'h-screen overflow-hidden' : 'min-h-screen'} bg-slate-950/60 backdrop-blur-[2px] text-white`}>
+          
+          {/* Canvas Rain Animation Overlay */}
+          {!currentUser ? (
+            /* LANDING LAYOUT */
             <LandingPage
               onGetStarted={() => {
                 setAuthMode('login');
@@ -327,377 +327,377 @@ export default function App() {
               language={language}
               setLanguage={setLanguage}
             />
+          ) : (
+            /* AUTHORIZED EXTENSION OPERATIONAL HUB */
+            <DashboardLayout
+              user={currentUser}
+              notifications={notifications}
+              activeTab={activeTab}
+              setActiveTab={setActiveTab}
+              onLogout={() => {
+                setCurrentUser(null);
+                setToken(null);
+              }}
+              onMarkNotificationsRead={handleMarkNotificationsRead}
+              theme={theme}
+              toggleTheme={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+              language={language}
+              setLanguage={setLanguage}
+              isRainy={isRainy}
+              setIsRainy={setIsRainy}
+              predictions={predictions}
+            >
+              {/* DYNAMIC TAB CONSOLE */}
+              {activeTab === 'home' && (
+                <HomePage
+                  user={currentUser}
+                  setActiveTab={setActiveTab}
+                  predictions={predictions}
+                  theme={theme}
+                  language={language}
+                />
+              )}
 
-            {/* AUTHENTICATION MODAL */}
-            {showAuthModal && (
-              <div 
-                className="fixed inset-0 flex items-center justify-center z-50 p-4 animate-fade-in bg-cover bg-center"
-                style={{ backgroundImage: "url('/farm_landing_bg.png')" }}
-              >
-                {/* Dark blur overlay */}
-                <div className="absolute inset-0 bg-slate-950/65 backdrop-blur-md z-0" />
-
-                <div className="bg-slate-900/90 border border-slate-800/80 p-6 sm:p-8 rounded-3xl w-full max-w-md h-[550px] relative shadow-2xl text-white flex flex-col justify-between overflow-hidden animate-scale-in z-10 backdrop-blur-sm">
-                  <button
-                    id="close-auth-modal"
-                    onClick={() => setShowAuthModal(false)}
-                    className="absolute right-4 top-4 p-1 rounded-lg text-slate-500 hover:text-white hover:bg-slate-800 cursor-pointer z-20"
-                  >
-                    <X className="w-5 h-5" />
-                  </button>
-
-                  <div className="text-center mb-2 shrink-0">
-                    <div className="w-12 h-12 bg-emerald-500/10 border border-emerald-500/30 rounded-xl flex items-center justify-center text-emerald-400 mx-auto mb-2">
-                      <Sprout className="w-6 h-6 animate-pulse" />
-                    </div>
-                    <h3 className="text-lg font-bold text-slate-100">
-                      {authMode === 'login' ? 'Farmer Log In Portal' : 'Register Agricultural Account'}
-                    </h3>
-                    <p className="text-[10px] font-mono text-emerald-400 uppercase tracking-wider mt-0.5">Enterprise Agricultural Extension</p>
-                  </div>
-
-                  <form onSubmit={authMode === 'login' ? handleLogin : handleRegister} className="flex-1 overflow-y-auto pr-1 space-y-4 scrollbar-thin my-2">
-                    {authMode === 'register' && (
-                      <>
-                        <div>
-                          <label className="block text-[10px] font-semibold text-slate-500 uppercase tracking-wider mb-1">Full Name</label>
-                          <input
-                            id="auth-reg-name"
-                            type="text"
-                            value={authForm.name}
-                            onChange={e => setAuthForm({ ...authForm, name: e.target.value })}
-                            className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-xs focus:ring-1 focus:ring-emerald-500 outline-none text-slate-100"
-                            required
-                          />
-                        </div>
-                        <div>
-                          <label className="block text-[10px] font-semibold text-slate-500 uppercase tracking-wider mb-1">Agronomic Role</label>
-                          <select
-                            id="auth-reg-role"
-                            value={authForm.role}
-                            onChange={e => setAuthForm({ ...authForm, role: e.target.value })}
-                            className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-xs focus:ring-1 focus:ring-emerald-500 outline-none text-slate-100"
-                          >
-                            <option value="Farmer">Farmer (Cultivator)</option>
-                            <option value="Agricultural Officer">Agricultural Officer (Advisor)</option>
-                            <option value="Admin">System Administrator</option>
-                          </select>
-                        </div>
-                      </>
-                    )}
-
-                    <div>
-                      <label className="block text-[10px] font-semibold text-slate-500 uppercase tracking-wider mb-1">Authorized Email</label>
-                      <input
-                        id="auth-email-input"
-                        type="email"
-                        value={authForm.email}
-                        onChange={e => setAuthForm({ ...authForm, email: e.target.value })}
-                        placeholder="e.g. farmer@agriguard.ai"
-                        className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-xs focus:ring-1 focus:ring-emerald-500 outline-none text-slate-100"
-                        required
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-[10px] font-semibold text-slate-500 uppercase tracking-wider mb-1">Passcode Credentials</label>
-                      <input
-                        id="auth-password-input"
-                        type="password"
-                        value={authForm.password}
-                        onChange={e => setAuthForm({ ...authForm, password: e.target.value })}
-                        className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-xs focus:ring-1 focus:ring-emerald-500 outline-none text-slate-100"
-                        required
-                      />
-                      <span className="text-[9px] text-slate-500 block mt-1">Pre-seeded accounts use <b>password123</b> to bypass locks.</span>
-                    </div>
-
-                    {authError && (
-                      <p className="p-2.5 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-[10px] font-medium flex items-center gap-1.5 leading-normal">
-                        <ShieldAlert className="w-4 h-4 text-red-500 shrink-0" /> {authError}
+              {activeTab === 'dashboard' && (
+                <div className="space-y-8 animate-fade-in">
+                  {/* Dynamic Welcome Card */}
+                  <div className={`p-6 sm:p-8 rounded-3xl border relative overflow-hidden ${theme === 'dark' ? 'bg-slate-900/40 border-slate-800/80' : 'bg-white border-slate-200 shadow-sm'}`}>
+                    <div className="absolute top-0 right-0 w-32 h-32 rounded-full bg-emerald-500/5 blur-[40px]" />
+                    <div className="max-w-2xl space-y-3">
+                      <span className="text-[9px] font-mono tracking-widest text-emerald-500 uppercase">Extension Operational Summary</span>
+                      <h2 className="text-xl sm:text-2xl font-black text-slate-800 dark:text-slate-100 leading-tight">
+                        Welcome back, {currentUser.name}.
+                      </h2>
+                      <p className="text-xs text-slate-500 leading-relaxed font-light">
+                        Your farmland monitoring coordinates in <b>{currentUser.location || 'Punjab, India'}</b> are currently synched with our predictive modeling cluster. Review telemetry ratios and run a crop recommendation simulation below.
                       </p>
-                    )}
-
-                    <button
-                      id="auth-submit-btn"
-                      type="submit"
-                      className="w-full py-2.5 px-4 bg-gradient-to-r from-emerald-500 to-teal-500 text-slate-950 hover:from-emerald-400 hover:to-teal-400 text-xs font-bold rounded-xl transition-all shadow-lg shadow-emerald-500/10 cursor-pointer"
-                    >
-                      {authMode === 'login' ? 'Authenticate Account' : 'Initialize Account'}
-                    </button>
-                  </form>
-
-                  <div className="pt-4 border-t border-slate-800 mt-4 text-center">
-                    <button
-                      id="auth-toggle-mode-btn"
-                      onClick={() => {
-                        setAuthError(null);
-                        setAuthMode(authMode === 'login' ? 'register' : 'login');
-                      }}
-                      className="text-[11px] text-slate-400 hover:text-emerald-400 transition-colors cursor-pointer"
-                    >
-                      {authMode === 'login' ? "New operator? Initialize account registration" : 'Registered Farmer? Log In'}
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
-          </>
-        ) : (
-          /* AUTHORIZED EXTENSION OPERATIONAL HUB */
-          <DashboardLayout
-            user={currentUser}
-            notifications={notifications}
-            activeTab={activeTab}
-            setActiveTab={setActiveTab}
-            onLogout={() => {
-              setCurrentUser(null);
-              setToken(null);
-            }}
-            onMarkNotificationsRead={handleMarkNotificationsRead}
-            theme={theme}
-            toggleTheme={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-            language={language}
-            setLanguage={setLanguage}
-            isRainy={isRainy}
-            setIsRainy={setIsRainy}
-            predictions={predictions}
-          >
-            {/* DYNAMIC TAB CONSOLE */}
-            {activeTab === 'home' && (
-              <HomePage
-                user={currentUser}
-                setActiveTab={setActiveTab}
-                predictions={predictions}
-                theme={theme}
-                language={language}
-              />
-            )}
-
-            {activeTab === 'dashboard' && (
-              <div className="space-y-8 animate-fade-in">
-                {/* Dynamic Welcome Card */}
-                <div className={`p-6 sm:p-8 rounded-3xl border relative overflow-hidden ${theme === 'dark' ? 'bg-slate-900/40 border-slate-800/80' : 'bg-white border-slate-200 shadow-sm'}`}>
-                  <div className="absolute top-0 right-0 w-32 h-32 rounded-full bg-emerald-500/5 blur-[40px]" />
-                  <div className="max-w-2xl space-y-3">
-                    <span className="text-[9px] font-mono tracking-widest text-emerald-500 uppercase">Extension Operational Summary</span>
-                    <h2 className="text-xl sm:text-2xl font-black text-slate-800 dark:text-slate-100 leading-tight">
-                      Welcome back, {currentUser.name}.
-                    </h2>
-                    <p className="text-xs text-slate-500 leading-relaxed font-light">
-                      Your farmland monitoring coordinates in <b>{currentUser.location || 'Punjab, India'}</b> are currently synched with our predictive modeling cluster. Review telemetry ratios and run a crop recommendation simulation below.
-                    </p>
-                    
-                    <div className="pt-3 flex flex-wrap gap-2.5">
-                      <button
-                        id="dashboard-predict-quick"
-                        onClick={() => setActiveTab('recommend')}
-                        className="px-4 py-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs rounded-xl transition-all cursor-pointer shadow-md shadow-emerald-500/15"
-                      >
-                        Run Crop Intelligence
-                      </button>
-                      <button
-                        id="dashboard-weather-quick"
-                        onClick={() => setActiveTab('weather')}
-                        className="px-4 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-bold text-xs rounded-xl transition-all border dark:border-slate-700 cursor-pointer"
-                      >
-                        Check Weather Ratios
-                      </button>
-                    </div>
-                  </div>
-                </div>
-
-                {/* RECENT ACTIONS GRID */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {/* Micro climate widget */}
-                  <div className={`p-5 rounded-2xl border ${theme === 'dark' ? 'bg-slate-900/30 border-slate-800/80' : 'bg-white border-slate-200 shadow-sm'} space-y-4`}>
-                    <div className="flex justify-between items-center pb-2 border-b dark:border-slate-800">
-                      <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400">Atmospheric Micro-Climate</h3>
-                      <span className="text-[8px] font-mono text-emerald-500 font-bold px-2 py-0.5 bg-emerald-500/10 rounded-full">OPTIMAL</span>
-                    </div>
-                    
-                    <div className="grid grid-cols-3 gap-2 text-center py-2">
-                      <div className="p-3 bg-slate-100/40 dark:bg-slate-800/20 rounded-xl space-y-1">
-                        <p className="text-[9px] text-slate-400">Rainfall</p>
-                        <p className="font-mono text-xs font-bold text-emerald-500">110 mm</p>
-                      </div>
-                      <div className="p-3 bg-slate-100/40 dark:bg-slate-800/20 rounded-xl space-y-1">
-                        <p className="text-[9px] text-slate-400">Ambient Temp</p>
-                        <p className="font-mono text-xs font-bold text-emerald-500">24.5 °C</p>
-                      </div>
-                      <div className="p-3 bg-slate-100/40 dark:bg-slate-800/20 rounded-xl space-y-1">
-                        <p className="text-[9px] text-slate-400">Air Humidity</p>
-                        <p className="font-mono text-xs font-bold text-emerald-500">62%</p>
+                      
+                      <div className="pt-3 flex flex-wrap gap-2.5">
+                        <button
+                          id="dashboard-predict-quick"
+                          onClick={() => setActiveTab('recommend')}
+                          className="px-4 py-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs rounded-xl transition-all cursor-pointer shadow-md shadow-emerald-500/15"
+                        >
+                          Run Crop Intelligence
+                        </button>
+                        <button
+                          id="dashboard-weather-quick"
+                          onClick={() => setActiveTab('weather')}
+                          className="px-4 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-bold text-xs rounded-xl transition-all border dark:border-slate-700 cursor-pointer"
+                        >
+                          Check Weather Ratios
+                        </button>
                       </div>
                     </div>
                   </div>
 
-                  {/* Latest prediction quick access */}
-                  <div className={`p-5 rounded-2xl border ${theme === 'dark' ? 'bg-slate-900/30 border-slate-800/80' : 'bg-white border-slate-200 shadow-sm'} space-y-4`}>
-                    <div className="flex justify-between items-center pb-2 border-b dark:border-slate-800">
-                      <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 font-medium">Latest Computed Prediction</h3>
-                      <span className="text-[9px] text-emerald-400 cursor-pointer flex items-center font-bold" onClick={() => setActiveTab('history')}>
-                        View History
-                      </span>
-                    </div>
-
-                    {predictions.length === 0 ? (
-                      <p className="text-xs text-slate-400 py-4 text-center">No reports computed yet.</p>
-                    ) : (
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center font-black font-mono text-xs text-emerald-500 border border-emerald-500/20">
-                            {predictions[0].result.confidence.toFixed(0)}%
-                          </div>
-                          <div>
-                            <p className="text-xs font-bold text-slate-700 dark:text-slate-200">{predictions[0].result.bestCrop}</p>
-                            <p className="text-[9px] text-slate-400 mt-0.5">{predictions[0].input.location}</p>
-                          </div>
+                  {/* RECENT ACTIONS GRID */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {/* Micro climate widget */}
+                    <div className={`p-5 rounded-2xl border ${theme === 'dark' ? 'bg-slate-900/30 border-slate-800/80' : 'bg-white border-slate-200 shadow-sm'} space-y-4`}>
+                      <div className="flex justify-between items-center pb-2 border-b dark:border-slate-800">
+                        <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400">Atmospheric Micro-Climate</h3>
+                        <span className="text-[8px] font-mono text-emerald-500 font-bold px-2 py-0.5 bg-emerald-500/10 rounded-full">OPTIMAL</span>
+                      </div>
+                      
+                      <div className="grid grid-cols-3 gap-2 text-center py-2">
+                        <div className="p-3 bg-slate-100/40 dark:bg-slate-800/20 rounded-xl space-y-1">
+                          <p className="text-[9px] text-slate-400">Rainfall</p>
+                          <p className="font-mono text-xs font-bold text-emerald-500">110 mm</p>
                         </div>
-                        <span className="text-[9px] px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-500 font-bold uppercase">
-                          {predictions[0].result.riskLevel} Risk
+                        <div className="p-3 bg-slate-100/40 dark:bg-slate-800/20 rounded-xl space-y-1">
+                          <p className="text-[9px] text-slate-400">Ambient Temp</p>
+                          <p className="font-mono text-xs font-bold text-emerald-500">24.5 °C</p>
+                        </div>
+                        <div className="p-3 bg-slate-100/40 dark:bg-slate-800/20 rounded-xl space-y-1">
+                          <p className="text-[9px] text-slate-400">Air Humidity</p>
+                          <p className="font-mono text-xs font-bold text-emerald-500">62%</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Latest prediction quick access */}
+                    <div className={`p-5 rounded-2xl border ${theme === 'dark' ? 'bg-slate-900/30 border-slate-800/80' : 'bg-white border-slate-200 shadow-sm'} space-y-4`}>
+                      <div className="flex justify-between items-center pb-2 border-b dark:border-slate-800">
+                        <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 font-medium">Latest Computed Prediction</h3>
+                        <span className="text-[9px] text-emerald-400 cursor-pointer flex items-center font-bold" onClick={() => setActiveTab('history')}>
+                          View History
                         </span>
                       </div>
-                    )}
+
+                      {predictions.length === 0 ? (
+                        <p className="text-xs text-slate-400 py-4 text-center">No reports computed yet.</p>
+                      ) : (
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center font-black font-mono text-xs text-emerald-500 border border-emerald-500/20">
+                              {predictions[0].result.confidence.toFixed(0)}%
+                            </div>
+                            <div>
+                              <p className="text-xs font-bold text-slate-700 dark:text-slate-200">{predictions[0].result.bestCrop}</p>
+                              <p className="text-[9px] text-slate-400 mt-0.5">{predictions[0].input.location}</p>
+                            </div>
+                          </div>
+                          <span className="text-[9px] px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-500 font-bold uppercase">
+                            {predictions[0].result.riskLevel} Risk
+                          </span>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
+              )}
+
+              {activeTab === 'recommend' && (
+                <CropPredictor
+                  userId={currentUser.id}
+                  userName={currentUser.name}
+                  onPredictionCompleted={handlePredictionCompleted}
+                  theme={theme}
+                  language={language}
+                />
+              )}
+
+              {activeTab === 'history' && (
+                <HistoryView
+                  predictions={predictions}
+                  onDeletePrediction={handleDeletePrediction}
+                  theme={theme}
+                />
+              )}
+
+              {activeTab === 'analytics' && (
+                <AnalyticsDashboard
+                  predictions={predictions}
+                  theme={theme}
+                />
+              )}
+
+              {activeTab === 'weather' && (
+                <WeatherDashboard
+                  location={currentUser.location || 'Punjab, India'}
+                  theme={theme}
+                  language={language}
+                  onWeatherLoaded={(weather) => {
+                    if (weather.condition === 'Rainy' || weather.condition === 'Stormy') {
+                      setIsRainy(true);
+                    } else {
+                      setIsRainy(false);
+                    }
+                  }}
+                />
+              )}
+
+              {activeTab === 'fertilizers' && (
+                <FertilizersPage
+                  theme={theme}
+                  language={language}
+                />
+              )}
+
+              {activeTab === 'activities' && (
+                <AgriActivitiesPage
+                  theme={theme}
+                  language={language}
+                />
+              )}
+
+              {activeTab === 'chat' && (
+                <AIChatAssistant
+                  theme={theme}
+                  predictions={predictions}
+                  language={language}
+                />
+              )}
+
+              {activeTab === 'profile' && (
+                <ProfilePage
+                  user={currentUser}
+                  onUpdateProfile={handleUpdateProfile}
+                  theme={theme}
+                />
+              )}
+
+              {activeTab === 'admin' && (
+                <AdminDashboard
+                  theme={theme}
+                  onBroadcastNotification={handleBroadcastNotification}
+                />
+              )}
+
+              {activeTab === 'settings' && (
+                <SettingsPage
+                  userId={currentUser.id}
+                  theme={theme}
+                  accessibility={accessibility}
+                  onChangeAccessibility={setAccessibility}
+                  onSubmitFeedback={handleSettingsFeedbackSubmit}
+                />
+              )}
+            </DashboardLayout>
+          )}
+        </div>
+      </div>
+
+      {/* AUTHENTICATION MODAL */}
+      {showAuthModal && (
+        <div 
+          className={`fixed inset-0 flex items-center justify-center z-50 p-4 animate-fade-in bg-cover bg-center ${accessibility.largeText ? 'text-lg' : 'text-sm'} ${accessibility.highContrast ? 'contrast-125 saturate-150' : ''}`}
+          style={{ backgroundImage: "url('/farm_landing_bg.png')" }}
+        >
+          {/* Dark blur overlay */}
+          <div className="absolute inset-0 bg-slate-950/65 backdrop-blur-md z-0" />
+
+          <div className="bg-slate-900/90 border border-slate-800/80 p-6 sm:p-8 rounded-3xl w-full max-w-md h-[550px] relative shadow-2xl text-white flex flex-col justify-between overflow-hidden animate-scale-in z-10 backdrop-blur-sm">
+            <button
+              id="close-auth-modal"
+              onClick={() => setShowAuthModal(false)}
+              className="absolute right-4 top-4 p-1 rounded-lg text-slate-500 hover:text-white hover:bg-slate-800 cursor-pointer z-20"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            <div className="text-center mb-2 shrink-0">
+              <div className="w-12 h-12 bg-emerald-500/10 border border-emerald-500/30 rounded-xl flex items-center justify-center text-emerald-400 mx-auto mb-2">
+                <Sprout className="w-6 h-6 animate-pulse" />
               </div>
-            )}
+              <h3 className="text-lg font-bold text-slate-100">
+                {authMode === 'login' ? 'Farmer Log In Portal' : 'Register Agricultural Account'}
+              </h3>
+              <p className="text-[10px] font-mono text-emerald-400 uppercase tracking-wider mt-0.5">Enterprise Agricultural Extension</p>
+            </div>
 
-            {activeTab === 'recommend' && (
-              <CropPredictor
-                userId={currentUser.id}
-                userName={currentUser.name}
-                onPredictionCompleted={handlePredictionCompleted}
-                theme={theme}
-                language={language}
-              />
-            )}
+            <form onSubmit={authMode === 'login' ? handleLogin : handleRegister} className="flex-1 overflow-y-auto pr-1 space-y-4 scrollbar-thin my-2">
+              {authMode === 'register' && (
+                <>
+                  <div>
+                    <label className="block text-[10px] font-semibold text-slate-500 uppercase tracking-wider mb-1">Full Name</label>
+                    <input
+                      id="auth-reg-name"
+                      type="text"
+                      value={authForm.name}
+                      onChange={e => setAuthForm({ ...authForm, name: e.target.value })}
+                      className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-xs focus:ring-1 focus:ring-emerald-500 outline-none text-slate-100"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-semibold text-slate-500 uppercase tracking-wider mb-1">Agronomic Role</label>
+                    <select
+                      id="auth-reg-role"
+                      value={authForm.role}
+                      onChange={e => setAuthForm({ ...authForm, role: e.target.value })}
+                      className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-xs focus:ring-1 focus:ring-emerald-500 outline-none text-slate-100"
+                    >
+                      <option value="Farmer">Farmer (Cultivator)</option>
+                      <option value="Agricultural Officer">Agricultural Officer (Advisor)</option>
+                      <option value="Admin">System Administrator</option>
+                    </select>
+                  </div>
+                </>
+              )}
 
-            {activeTab === 'history' && (
-              <HistoryView
-                predictions={predictions}
-                onDeletePrediction={handleDeletePrediction}
-                theme={theme}
-              />
-            )}
+              <div>
+                <label className="block text-[10px] font-semibold text-slate-500 uppercase tracking-wider mb-1">Authorized Email</label>
+                <input
+                  id="auth-email-input"
+                  type="email"
+                  value={authForm.email}
+                  onChange={e => setAuthForm({ ...authForm, email: e.target.value })}
+                  placeholder="e.g. farmer@agriguard.ai"
+                  className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-xs focus:ring-1 focus:ring-emerald-500 outline-none text-slate-100"
+                  required
+                />
+              </div>
 
-            {activeTab === 'analytics' && (
-              <AnalyticsDashboard
-                predictions={predictions}
-                theme={theme}
-              />
-            )}
+              <div>
+                <label className="block text-[10px] font-semibold text-slate-500 uppercase tracking-wider mb-1">Passcode Credentials</label>
+                <input
+                  id="auth-password-input"
+                  type="password"
+                  value={authForm.password}
+                  onChange={e => setAuthForm({ ...authForm, password: e.target.value })}
+                  className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-xs focus:ring-1 focus:ring-emerald-500 outline-none text-slate-100"
+                  required
+                />
+                <span className="text-[9px] text-slate-500 block mt-1">Pre-seeded accounts use <b>password123</b> to bypass locks.</span>
+              </div>
 
-            {activeTab === 'weather' && (
-              <WeatherDashboard
-                location={currentUser.location || 'Punjab, India'}
-                theme={theme}
-                language={language}
-                onWeatherLoaded={(weather) => {
-                  if (weather.condition === 'Rainy' || weather.condition === 'Stormy') {
-                    setIsRainy(true);
-                  } else {
-                    setIsRainy(false);
-                  }
+              {authError && (
+                <p className="p-2.5 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-[10px] font-medium flex items-center gap-1.5 leading-normal">
+                  <ShieldAlert className="w-4 h-4 text-red-500 shrink-0" /> {authError}
+                </p>
+              )}
+
+              <button
+                id="auth-submit-btn"
+                type="submit"
+                className="w-full py-2.5 px-4 bg-gradient-to-r from-emerald-500 to-teal-500 text-slate-950 hover:from-emerald-400 hover:to-teal-400 text-xs font-bold rounded-xl transition-all shadow-lg shadow-emerald-500/10 cursor-pointer"
+              >
+                {authMode === 'login' ? 'Authenticate Account' : 'Initialize Account'}
+              </button>
+            </form>
+
+            <div className="pt-4 border-t border-slate-800 mt-4 text-center">
+              <button
+                id="auth-toggle-mode-btn"
+                onClick={() => {
+                  setAuthError(null);
+                  setAuthMode(authMode === 'login' ? 'register' : 'login');
                 }}
-              />
-            )}
-
-            {activeTab === 'fertilizers' && (
-              <FertilizersPage
-                theme={theme}
-                language={language}
-              />
-            )}
-
-            {activeTab === 'activities' && (
-              <AgriActivitiesPage
-                theme={theme}
-                language={language}
-              />
-            )}
-
-            {activeTab === 'chat' && (
-              <AIChatAssistant
-                theme={theme}
-                predictions={predictions}
-                language={language}
-              />
-            )}
-
-            {activeTab === 'profile' && (
-              <ProfilePage
-                user={currentUser}
-                onUpdateProfile={handleUpdateProfile}
-                theme={theme}
-              />
-            )}
-
-            {activeTab === 'admin' && (
-              <AdminDashboard
-                theme={theme}
-                onBroadcastNotification={handleBroadcastNotification}
-              />
-            )}
-
-            {activeTab === 'settings' && (
-              <SettingsPage
-                userId={currentUser.id}
-                theme={theme}
-                accessibility={accessibility}
-                onChangeAccessibility={setAccessibility}
-                onSubmitFeedback={handleSettingsFeedbackSubmit}
-              />
-            )}
-          </DashboardLayout>
-        )}
-
-        {/* DAILY TIP MODAL */}
-        {showDailyTip && (
-          <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-md flex items-center justify-center z-[100] p-4 animate-fade-in">
-            <div className="bg-slate-900/90 border border-emerald-500/30 p-6 sm:p-8 rounded-3xl w-full max-w-lg relative shadow-2xl text-white animate-scale-in overflow-hidden">
-              <div className="absolute top-0 right-0 w-32 h-32 rounded-full bg-emerald-500/10 blur-[40px] pointer-events-none" />
-              
-              <div className="text-center mb-6">
-                <div className="w-14 h-14 bg-emerald-500/15 border border-emerald-500/30 rounded-2xl flex items-center justify-center text-emerald-400 mx-auto mb-4 shadow-lg shadow-emerald-500/10">
-                  <Sprout className="w-7 h-7" />
-                </div>
-                <span className="text-[10px] font-mono text-emerald-400 uppercase tracking-widest font-black">AgriGuard Daily Advisory</span>
-                <h3 className="text-xl font-black text-slate-100 mt-1">
-                  Today's Agronomy Tip
-                </h3>
-              </div>
-
-              <div className="bg-slate-950/50 border border-slate-800 p-5 rounded-2xl space-y-4">
-                <div className="space-y-1">
-                  <span className="text-[9px] font-mono uppercase tracking-wider text-slate-400">English</span>
-                  <p className="text-xs text-slate-200 leading-relaxed font-light">
-                    {DAILY_TIPS[currentTipIndex].en}
-                  </p>
-                </div>
-
-                <div className="space-y-1 border-t border-slate-800/80 pt-3">
-                  <span className="text-[9px] font-mono tracking-wider text-emerald-500/70">தமிழ் (Tamil)</span>
-                  <p className="text-xs text-slate-300 leading-relaxed font-light">
-                    {DAILY_TIPS[currentTipIndex].ta}
-                  </p>
-                </div>
-              </div>
-
-              <div className="mt-6 flex justify-end">
-                <button
-                  id="close-daily-tip-btn"
-                  onClick={() => setShowDailyTip(false)}
-                  className="px-5 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-xs rounded-xl transition-all cursor-pointer shadow-lg shadow-emerald-500/10 hover:shadow-emerald-500/20"
-                >
-                  Dismiss Tip
-                </button>
-              </div>
+                className="text-[11px] text-slate-400 hover:text-emerald-400 transition-colors cursor-pointer"
+              >
+                {authMode === 'login' ? "New operator? Initialize account registration" : 'Registered Farmer? Log In'}
+              </button>
             </div>
           </div>
-        )}
-      </div>
-    </div>
+        </div>
+      )}
+
+      {/* DAILY TIP MODAL */}
+      {showDailyTip && (
+        <div className={`fixed inset-0 bg-slate-950/80 backdrop-blur-md flex items-center justify-center z-[100] p-4 animate-fade-in ${accessibility.largeText ? 'text-lg' : 'text-sm'} ${accessibility.highContrast ? 'contrast-125 saturate-150' : ''}`}>
+          <div className="bg-slate-900/90 border border-emerald-500/30 p-6 sm:p-8 rounded-3xl w-full max-w-lg relative shadow-2xl text-white animate-scale-in overflow-hidden">
+            <div className="absolute top-0 right-0 w-32 h-32 rounded-full bg-emerald-500/10 blur-[40px] pointer-events-none" />
+            
+            <div className="text-center mb-6">
+              <div className="w-14 h-14 bg-emerald-500/15 border border-emerald-500/30 rounded-2xl flex items-center justify-center text-emerald-400 mx-auto mb-4 shadow-lg shadow-emerald-500/10">
+                <Sprout className="w-7 h-7" />
+              </div>
+              <span className="text-[10px] font-mono text-emerald-400 uppercase tracking-widest font-black">AgriGuard Daily Advisory</span>
+              <h3 className="text-xl font-black text-slate-100 mt-1">
+                Today's Agronomy Tip
+              </h3>
+            </div>
+
+            <div className="bg-slate-950/50 border border-slate-800 p-5 rounded-2xl space-y-4">
+              <div className="space-y-1">
+                <span className="text-[9px] font-mono uppercase tracking-wider text-slate-400">English</span>
+                <p className="text-xs text-slate-200 leading-relaxed font-light">
+                  {DAILY_TIPS[currentTipIndex].en}
+                </p>
+              </div>
+
+              <div className="space-y-1 border-t border-slate-800/80 pt-3">
+                <span className="text-[9px] font-mono tracking-wider text-emerald-500/70">தமிழ் (Tamil)</span>
+                <p className="text-xs text-slate-300 leading-relaxed font-light">
+                  {DAILY_TIPS[currentTipIndex].ta}
+                </p>
+              </div>
+            </div>
+
+            <div className="mt-6 flex justify-end">
+              <button
+                id="close-daily-tip-btn"
+                onClick={() => setShowDailyTip(false)}
+                className="px-5 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-xs rounded-xl transition-all cursor-pointer shadow-lg shadow-emerald-500/10 hover:shadow-emerald-500/20"
+              >
+                Dismiss Tip
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 }
